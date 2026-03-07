@@ -109,6 +109,35 @@
     );
   }
 
+  function isBlobLike(value) {
+    return typeof Blob !== "undefined" && value instanceof Blob;
+  }
+
+  function toTextContent(value) {
+    if (typeof value === "string") return Promise.resolve(value);
+    if (isBlobLike(value)) return value.text();
+    return Promise.resolve(String(value || ""));
+  }
+
+  function createImagePreviewUrl(fileData, name) {
+    const isSvg = /\.svg$/i.test(name);
+    if (isSvg) {
+      return toTextContent(fileData).then(function (text) {
+        return URL.createObjectURL(
+          new Blob([text], { type: "image/svg+xml;charset=utf-8" }),
+        );
+      });
+    }
+
+    if (isBlobLike(fileData)) {
+      return Promise.resolve(URL.createObjectURL(fileData));
+    }
+
+    return Promise.resolve(
+      URL.createObjectURL(new Blob([fileData], { type: "application/octet-stream" })),
+    );
+  }
+
   function loadDir() {
     contentEl.innerHTML =
       '<div class="loading" aria-live="polite">Loading…</div>';
@@ -243,24 +272,25 @@
       .then(function (stat) {
         const name = (stat.name || path).toLowerCase();
         const isImage = /\.(jpe?g|png|gif|webp|bmp|svg)$/i.test(name);
-        return puter.fs.read(path).then(function (blob) {
+        return puter.fs.read(path).then(function (fileData) {
           if (isImage) {
-            const url = URL.createObjectURL(blob);
-            modalBody.innerHTML =
-              '<img class="preview-image" src="' + url + '" alt="Preview">';
-            modalDialog.addEventListener(
-              "modal-close-cleanup",
-              function cleanup() {
-                URL.revokeObjectURL(url);
-                modalDialog.removeEventListener(
-                  "modal-close-cleanup",
-                  cleanup,
-                );
-              },
-              { once: true },
-            );
+            return createImagePreviewUrl(fileData, name).then(function (url) {
+              modalBody.innerHTML =
+                '<img class="preview-image" src="' + url + '" alt="Preview">';
+              modalDialog.addEventListener(
+                "modal-close-cleanup",
+                function cleanup() {
+                  URL.revokeObjectURL(url);
+                  modalDialog.removeEventListener(
+                    "modal-close-cleanup",
+                    cleanup,
+                  );
+                },
+                { once: true },
+              );
+            });
           } else if (/\.(txt|md|json|js|css|html|log)$/i.test(name)) {
-            blob.text().then(function (text) {
+            toTextContent(fileData).then(function (text) {
               modalBody.innerHTML =
                 '<pre class="preview-text">' + escapeHtml(text) + "</pre>";
             });
@@ -291,26 +321,10 @@
       escapeHtml(name) +
       "</strong>? This cannot be undone.</p>";
     modalFooter.innerHTML =
-      '<button type="button" class="btn" id="modal-cancel"><i class="fa-solid fa-xmark" aria-hidden="true"></i><span>Cancel</span></button><button type="button" class="btn btn-danger" id="modal-confirm-delete"><i class="fa-solid fa-trash" aria-hidden="true"></i><span>Delete</span></button>';
+      '<button type="button" class="btn" id="modal-cancel"><i class="fa-solid fa-xmark" aria-hidden="true"></i><span>Cancel</span></button><button type="button" class="btn btn-danger" id="modal-confirm-delete" data-path="' +
+      escapeAttr(path) +
+      '"><i class="fa-solid fa-trash" aria-hidden="true"></i><span>Delete</span></button>';
     modalDialog.showModal();
-
-    document
-      .getElementById("modal-cancel")
-      .addEventListener("click", closeModal);
-    document
-      .getElementById("modal-confirm-delete")
-      .addEventListener("click", function () {
-        puter.fs
-          .delete(path)
-          .then(function () {
-            closeModal();
-            loadDir();
-          })
-          .catch(function (err) {
-            showError("Delete failed");
-            closeModal();
-          });
-      });
   }
 
   function openFormDialog(opts) {
@@ -345,7 +359,9 @@
       escapeAttr(value) +
       '" placeholder="' +
       escapeAttr(placeholders[type]) +
-      '" autocomplete="off">';
+      '" autocomplete="off"' +
+      (opts.path ? ' data-path="' + escapeAttr(opts.path) + '"' : "") +
+      ">";
     modalFooter.innerHTML =
       '<button type="button" class="btn" id="modal-cancel"><i class="fa-solid fa-xmark" aria-hidden="true"></i><span>Cancel</span></button>' +
       '<button type="button" class="btn btn-primary" id="modal-confirm"><i class="fa-solid fa-check" aria-hidden="true"></i><span>' +
@@ -356,66 +372,6 @@
     const inputEl = document.getElementById("modal-input");
     inputEl.focus();
     inputEl.select();
-
-    document.getElementById("modal-cancel").addEventListener("click", closeModal);
-    function submitFormDialog() {
-      const val = inputEl.value.trim();
-      if (!val) {
-        showError("Please enter a value");
-        return;
-      }
-      if (type === "rename") {
-        const parent = opts.path.split("/").slice(0, -1).join("/") || APP_ROOT;
-        const newPath =
-          parent === APP_ROOT ? val : parent + "/" + val;
-        puter.fs
-          .rename(opts.path, newPath)
-          .then(function () {
-            closeModal();
-            loadDir();
-          })
-          .catch(function (err) {
-            showError("Rename failed");
-          });
-      } else if (type === "move") {
-        puter.fs
-          .move(opts.path, val)
-          .then(function () {
-            closeModal();
-            loadDir();
-          })
-          .catch(function (err) {
-            showError("Move failed");
-          });
-      } else if (type === "newFolder") {
-        const fullPath =
-          opts.currentPath === APP_ROOT ? val : opts.currentPath + "/" + val;
-        puter.fs
-          .mkdir(fullPath)
-          .then(function () {
-            closeModal();
-            loadDir();
-          })
-          .catch(function (err) {
-            if (isAuthError(err)) {
-              contentEl.innerHTML =
-                '<div class="empty-state">Sign in with Puter to create folders.</div>';
-              showError("Please sign in to continue");
-            } else {
-              showError("Could not create folder");
-            }
-            closeModal();
-          });
-      }
-    }
-
-    document.getElementById("modal-confirm").addEventListener("click", submitFormDialog);
-    inputEl.addEventListener("keydown", function (e) {
-      if (e.key === "Enter") {
-        e.preventDefault();
-        submitFormDialog();
-      }
-    });
   }
 
   function renameItem(path) {
@@ -433,13 +389,82 @@
   }
 
   function closeModal() {
-    modalDialog.close();
+    if (modalDialog.open) {
+      modalDialog.close();
+    }
     modalDialog.dispatchEvent(new Event("modal-close-cleanup"));
   }
 
-  modalClose.addEventListener("click", closeModal);
+  modalFooter.addEventListener("click", function (e) {
+    const btn = e.target.closest("button");
+    if (!btn) return;
+    const id = btn.id;
+    if (id === "modal-cancel") {
+      closeModal();
+    } else if (id === "modal-confirm") {
+      const inputEl = document.getElementById("modal-input");
+      if (!inputEl) return;
+      const val = inputEl.value.trim();
+      if (!val) {
+        showError("Please enter a value");
+        return;
+      }
+      const title = modalTitle.textContent;
+      if (title === "Rename") {
+        const path = inputEl.dataset.path;
+        puter.fs.rename(path, val).then(function () {
+          closeModal();
+          loadDir();
+        }).catch(function (err) {
+          showError("Rename failed");
+        });
+      } else if (title === "Move to") {
+        const path = inputEl.dataset.path;
+        puter.fs.move(path, val).then(function () {
+          closeModal();
+          loadDir();
+        }).catch(function (err) {
+          showError("Move failed");
+        });
+      } else if (title === "New folder") {
+        const fullPath = currentPath === APP_ROOT ? val : currentPath + "/" + val;
+        puter.fs.mkdir(fullPath).then(function () {
+          closeModal();
+          loadDir();
+        }).catch(function (err) {
+          showError("Failed to create folder");
+        });
+      }
+    } else if (id === "modal-confirm-delete") {
+      const path = btn.dataset.path;
+      puter.fs.delete(path).then(function () {
+        closeModal();
+        loadDir();
+      }).catch(function (err) {
+        showError("Delete failed");
+        closeModal();
+      });
+    }
+  });
+
+  modalBody.addEventListener("keydown", function (e) {
+    if (e.key === "Enter" && e.target.tagName === "INPUT") {
+      const btn = document.getElementById("modal-confirm");
+      if (btn) btn.click();
+    }
+  });
+
+  modalClose.addEventListener("click", function (e) {
+    e.preventDefault();
+    e.stopPropagation();
+    closeModal();
+  });
   modalDialog.addEventListener("click", function (e) {
     if (e.target === modalDialog) closeModal();
+  });
+  modalDialog.addEventListener("cancel", function (e) {
+    e.preventDefault();
+    closeModal();
   });
   modalDialog.addEventListener("close", function () {
     modalDialog.dispatchEvent(new Event("modal-close-cleanup"));
