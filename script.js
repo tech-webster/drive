@@ -18,7 +18,7 @@
       "rounded-[14px] border border-dashed border-drive-border-strong bg-drive-surface px-6 py-8 text-center text-[0.9375rem] text-drive-muted shadow-[0_4px_24px_rgba(0,0,0,0.25)]",
     loading: "p-8 text-center text-[0.9375rem] text-drive-muted",
     errorToast:
-      "fixed left-1/2 bottom-6 z-[1001] rounded-[10px] bg-drive-text px-6 py-3 text-sm font-medium text-drive-bg shadow-[0_12px_40px_rgba(0,0,0,0.4)] -translate-x-1/2",
+      "fixed left-1/2 bottom-6 z-[3000] rounded-[10px] bg-drive-text px-6 py-3 text-sm font-medium text-drive-bg shadow-[0_12px_40px_rgba(0,0,0,0.4)] -translate-x-1/2",
     fileList:
       "m-0 list-none rounded-[14px] border border-drive-border bg-drive-surface p-0 shadow-[0_4px_24px_rgba(0,0,0,0.25)]",
     fileItem:
@@ -43,6 +43,9 @@
     modalLabel: "mb-2 block text-sm font-medium text-drive-text",
     modalInput:
       "w-full rounded-[10px] border border-drive-border-strong bg-drive-panel px-3 py-2 text-[0.9375rem] text-drive-text outline-none placeholder:text-drive-faint focus:border-drive-accent focus:ring-2 focus:ring-drive-accent/15",
+    modalInputError:
+      "border-drive-danger focus:border-drive-danger focus:ring-drive-danger/15",
+    modalInlineError: "mt-2 text-sm text-drive-danger",
     buttonBase:
       "inline-flex cursor-pointer items-center gap-2 rounded-[10px] border px-4 py-2 text-sm font-medium touch-manipulation transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-drive-accent motion-reduce:transition-none",
     buttonNeutral:
@@ -51,6 +54,7 @@
       "border-drive-accent bg-drive-accent text-drive-bg hover:border-drive-accent-hover hover:bg-drive-accent-hover",
     buttonDanger:
       "border-drive-danger bg-drive-danger text-white hover:border-drive-danger-hover hover:bg-drive-danger-hover",
+    buttonDisabled: "pointer-events-none opacity-60",
   };
 
   function isAuthError(err) {
@@ -89,6 +93,91 @@
     setTimeout(function () {
       el.remove();
     }, 3000);
+  }
+
+  function parseErrorPayload(err) {
+    if (!err) return null;
+    if (typeof err === "string") {
+      try {
+        return JSON.parse(err);
+      } catch (parseFailure) {
+        return { message: err };
+      }
+    }
+    if (typeof err.message === "string") {
+      try {
+        const parsed = JSON.parse(err.message);
+        if (parsed && typeof parsed === "object") return parsed;
+      } catch (parseFailure) {
+        return { message: err.message };
+      }
+    }
+    if (typeof err === "object") return err;
+    return null;
+  }
+
+  function getDisplayErrorMessage(err, fallbackMessage) {
+    const payload = parseErrorPayload(err);
+    if (payload && typeof payload.message === "string" && payload.message.trim()) {
+      return payload.message.trim();
+    }
+    return fallbackMessage;
+  }
+
+  function clearInlineDialogError() {
+    const inputEl = document.getElementById("modal-input");
+    const errorEl = document.getElementById("modal-inline-error");
+    if (inputEl) {
+      inputEl.classList.remove(...classes.modalInputError.split(" "));
+      inputEl.removeAttribute("aria-invalid");
+      inputEl.removeAttribute("aria-describedby");
+    }
+    if (errorEl) {
+      errorEl.remove();
+    }
+  }
+
+  function showInlineDialogError(message) {
+    const inputEl = document.getElementById("modal-input");
+    if (!inputEl) {
+      showError(message);
+      return;
+    }
+
+    clearInlineDialogError();
+    inputEl.classList.add(...classes.modalInputError.split(" "));
+    inputEl.setAttribute("aria-invalid", "true");
+    inputEl.setAttribute("aria-describedby", "modal-inline-error");
+
+    const errorEl = document.createElement("p");
+    errorEl.id = "modal-inline-error";
+    errorEl.className = classes.modalInlineError;
+    errorEl.textContent = message;
+    inputEl.insertAdjacentElement("afterend", errorEl);
+    inputEl.focus();
+    inputEl.select();
+  }
+
+  function setModalSubmittingState(isSubmitting) {
+    const confirmBtn = document.getElementById("modal-confirm");
+    const deleteBtn = document.getElementById("modal-confirm-delete");
+    const cancelBtn = document.getElementById("modal-cancel");
+    const inputEl = document.getElementById("modal-input");
+    const buttons = [confirmBtn, deleteBtn, cancelBtn].filter(Boolean);
+    const disabledClasses = classes.buttonDisabled.split(" ");
+
+    buttons.forEach(function (button) {
+      button.disabled = isSubmitting;
+      button.setAttribute("aria-disabled", isSubmitting ? "true" : "false");
+      disabledClasses.forEach(function (className) {
+        button.classList.toggle(className, isSubmitting);
+      });
+    });
+
+    if (inputEl) {
+      inputEl.disabled = isSubmitting;
+      inputEl.setAttribute("aria-busy", isSubmitting ? "true" : "false");
+    }
   }
 
   function renderBreadcrumbTrail() {
@@ -500,7 +589,10 @@
       escapeAttr(fieldPlaceholders[actionType]) +
       '" autocomplete="off"' +
       (options.path ? ' data-path="' + escapeAttr(options.path) + '"' : "") +
-      ">";
+      ">" +
+      '<p id="modal-inline-error" class="' +
+      classes.modalInlineError +
+      ' hidden" aria-live="polite"></p>';
     modalFooter.innerHTML =
       '<button type="button" class="' +
       buttonClasses("neutral") +
@@ -513,6 +605,7 @@
     modalDialog.showModal();
 
     const inputEl = document.getElementById("modal-input");
+    clearInlineDialogError();
     inputEl.focus();
     inputEl.select();
   }
@@ -538,11 +631,13 @@
     } else if (id === "modal-confirm") {
       const inputEl = document.getElementById("modal-input");
       if (!inputEl) return;
+      clearInlineDialogError();
       const val = inputEl.value.trim();
       if (!val) {
-        showError("Please enter a value");
+        showInlineDialogError("Please enter a value");
         return;
       }
+      setModalSubmittingState(true);
       const title = modalTitle.textContent;
       if (title === "Rename") {
         const path = inputEl.dataset.path;
@@ -550,7 +645,8 @@
           closeModal();
           loadCurrentDirectory();
         }).catch(function (err) {
-          showError("Rename failed");
+          setModalSubmittingState(false);
+          showInlineDialogError(getDisplayErrorMessage(err, "Rename failed"));
         });
       } else if (title === "New folder") {
         const fullPath =
@@ -561,16 +657,21 @@
           closeModal();
           loadCurrentDirectory();
         }).catch(function (err) {
-          showError("Failed to create folder");
+          setModalSubmittingState(false);
+          showInlineDialogError(
+            getDisplayErrorMessage(err, "Failed to create folder"),
+          );
         });
       }
     } else if (id === "modal-confirm-delete") {
+      setModalSubmittingState(true);
       const path = btn.dataset.path;
       puter.fs.delete(path).then(function () {
         closeModal();
         loadCurrentDirectory();
       }).catch(function (err) {
-        showError("Delete failed");
+        setModalSubmittingState(false);
+        showError(getDisplayErrorMessage(err, "Delete failed"));
         closeModal();
       });
     }
@@ -629,7 +730,7 @@
               '">Sign in with Puter to upload files.</div>';
             showError("Please sign in to continue");
           } else {
-            showError("Upload failed");
+            showError(getDisplayErrorMessage(err, "Upload failed"));
           }
         uploadInput.value = "";
       });
