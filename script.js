@@ -1,6 +1,6 @@
 (function () {
-  var APP_ROOT = ".";
-  let currentPath = APP_ROOT;
+  const ROOT_PATH = ".";
+  let currentDirectoryPath = ROOT_PATH;
   const contentEl = document.getElementById("content");
   const breadcrumbEl = document.getElementById("breadcrumb");
   const modalDialog = document.getElementById("app-dialog");
@@ -21,17 +21,17 @@
     );
   }
 
-  function initAuth() {
+  function initializeTwDrive() {
     if (typeof puter === "undefined" || !puter.auth) {
-      setTimeout(initAuth, 50);
+      setTimeout(initializeTwDrive, 50);
       return;
     }
     if (puter.auth.isSignedIn()) {
-      loadDir();
+      loadCurrentDirectory();
     } else {
       contentEl.innerHTML =
-        '<div class="empty-state">Sign in with Puter in another tab or window to use your cloud drive here.</div>';
-      renderBreadcrumb();
+        '<div class="empty-state">Sign in with Puter in another tab or window to use TW Drive here.</div>';
+      renderBreadcrumbTrail();
     }
   }
 
@@ -46,9 +46,10 @@
     }, 3000);
   }
 
-  function renderBreadcrumb() {
-    var parts = currentPath === APP_ROOT ? [] : currentPath.split("/");
-    var html = '<a href="#" data-path="' + escapeAttr(APP_ROOT) + '">Home</a>';
+  function renderBreadcrumbTrail() {
+    var parts =
+      currentDirectoryPath === ROOT_PATH ? [] : currentDirectoryPath.split("/");
+    var html = '<a href="#" data-path="' + escapeAttr(ROOT_PATH) + '">Home</a>';
     var acc = "";
     parts.forEach(function (name) {
       acc = acc ? acc + "/" + name : name;
@@ -67,15 +68,15 @@
     } else {
       html =
         '<a href="#" data-path="' +
-        escapeAttr(APP_ROOT) +
+        escapeAttr(ROOT_PATH) +
         '">Home</a> <span class="current">/</span>';
     }
     breadcrumbEl.innerHTML = html;
     breadcrumbEl.querySelectorAll("a").forEach(function (a) {
       a.addEventListener("click", function (e) {
         e.preventDefault();
-        currentPath = a.getAttribute("data-path") || APP_ROOT;
-        loadDir();
+        currentDirectoryPath = a.getAttribute("data-path") || ROOT_PATH;
+        loadCurrentDirectory();
       });
     });
   }
@@ -138,13 +139,13 @@
     );
   }
 
-  function loadDir() {
+  function loadCurrentDirectory() {
     contentEl.innerHTML =
       '<div class="loading" aria-live="polite">Loading…</div>';
-    renderBreadcrumb();
+    renderBreadcrumbTrail();
 
     puter.fs
-      .readdir(currentPath)
+      .readdir(currentDirectoryPath)
       .then(function (items) {
         if (items.length === 0) {
           contentEl.innerHTML =
@@ -197,10 +198,10 @@
             const path = this.getAttribute("data-path");
             const isDir = this.getAttribute("data-isdir") === "1";
             if (isDir) {
-              currentPath = path.replace(/\/$/, "") || APP_ROOT;
-              loadDir();
+              currentDirectoryPath = path.replace(/\/$/, "") || ROOT_PATH;
+              loadCurrentDirectory();
             } else {
-              openFile(path);
+              openFilePreview(path);
             }
           });
         });
@@ -211,7 +212,7 @@
               .closest("li")
               .querySelector(".name")
               .getAttribute("data-path");
-            openFile(path);
+            openFilePreview(path);
           });
         });
         ul.querySelectorAll("button.rename").forEach(function (btn) {
@@ -221,7 +222,7 @@
               .closest("li")
               .querySelector(".name")
               .getAttribute("data-path");
-            renameItem(path);
+            openRenameDialog(path);
           });
         });
         ul.querySelectorAll("button.move").forEach(function (btn) {
@@ -231,7 +232,7 @@
               .closest("li")
               .querySelector(".name")
               .getAttribute("data-path");
-            moveItem(path);
+            openMoveDialog(path);
           });
         });
         ul.querySelectorAll("button.delete").forEach(function (btn) {
@@ -241,7 +242,7 @@
               .closest("li")
               .querySelector(".name")
               .getAttribute("data-path");
-            confirmDelete(path);
+            openDeleteDialog(path);
           });
         });
       })
@@ -260,7 +261,7 @@
       });
   }
 
-  function openFile(path) {
+  function openFilePreview(path) {
     modalTitle.textContent = path.split("/").filter(Boolean).pop() || path;
     modalBody.innerHTML =
       '<div class="loading" aria-live="polite">Loading…</div>';
@@ -313,7 +314,7 @@
       });
   }
 
-  function confirmDelete(path) {
+  function openDeleteDialog(path) {
     const name = path.split("/").filter(Boolean).pop() || path;
     modalTitle.textContent = "Delete?";
     modalBody.innerHTML =
@@ -327,45 +328,45 @@
     modalDialog.showModal();
   }
 
-  function openFormDialog(opts) {
-    const titles = {
+  function openActionDialog(options) {
+    const dialogTitles = {
       rename: "Rename",
       move: "Move to",
       newFolder: "New folder",
     };
-    const labels = {
+    const fieldLabels = {
       rename: "New name",
       move: "Directory path",
       newFolder: "Folder name",
     };
-    const placeholders = {
+    const fieldPlaceholders = {
       rename: "",
       move: ". or folder name",
       newFolder: "Folder name",
     };
-    const primaryLabels = {
+    const primaryButtonLabels = {
       rename: "Rename",
       move: "Move",
       newFolder: "Create",
     };
-    const type = opts.type;
-    const value = opts.value || "";
-    modalTitle.textContent = titles[type];
+    const actionType = options.type;
+    const value = options.value || "";
+    modalTitle.textContent = dialogTitles[actionType];
     modalBody.innerHTML =
       '<label for="modal-input" class="modal-form-label">' +
-      escapeHtml(labels[type]) +
+      escapeHtml(fieldLabels[actionType]) +
       "</label>" +
       '<input type="text" id="modal-input" class="modal-form-input" value="' +
       escapeAttr(value) +
       '" placeholder="' +
-      escapeAttr(placeholders[type]) +
+      escapeAttr(fieldPlaceholders[actionType]) +
       '" autocomplete="off"' +
-      (opts.path ? ' data-path="' + escapeAttr(opts.path) + '"' : "") +
+      (options.path ? ' data-path="' + escapeAttr(options.path) + '"' : "") +
       ">";
     modalFooter.innerHTML =
       '<button type="button" class="btn" id="modal-cancel"><i class="fa-solid fa-xmark" aria-hidden="true"></i><span>Cancel</span></button>' +
       '<button type="button" class="btn btn-primary" id="modal-confirm"><i class="fa-solid fa-check" aria-hidden="true"></i><span>' +
-      primaryLabels[type] +
+      primaryButtonLabels[actionType] +
       "</span></button>";
     modalDialog.showModal();
 
@@ -374,17 +375,17 @@
     inputEl.select();
   }
 
-  function renameItem(path) {
+  function openRenameDialog(path) {
     const name = path.split("/").filter(Boolean).pop() || path;
-    openFormDialog({ type: "rename", path: path, value: name });
+    openActionDialog({ type: "rename", path: path, value: name });
   }
 
-  function moveItem(path) {
-    openFormDialog({
+  function openMoveDialog(path) {
+    openActionDialog({
       type: "move",
       path: path,
-      value: APP_ROOT,
-      currentPath: currentPath,
+      value: ROOT_PATH,
+      currentDirectoryPath: currentDirectoryPath,
     });
   }
 
@@ -414,7 +415,7 @@
         const path = inputEl.dataset.path;
         puter.fs.rename(path, val).then(function () {
           closeModal();
-          loadDir();
+          loadCurrentDirectory();
         }).catch(function (err) {
           showError("Rename failed");
         });
@@ -422,15 +423,18 @@
         const path = inputEl.dataset.path;
         puter.fs.move(path, val).then(function () {
           closeModal();
-          loadDir();
+          loadCurrentDirectory();
         }).catch(function (err) {
           showError("Move failed");
         });
       } else if (title === "New folder") {
-        const fullPath = currentPath === APP_ROOT ? val : currentPath + "/" + val;
+        const fullPath =
+          currentDirectoryPath === ROOT_PATH
+            ? val
+            : currentDirectoryPath + "/" + val;
         puter.fs.mkdir(fullPath).then(function () {
           closeModal();
-          loadDir();
+          loadCurrentDirectory();
         }).catch(function (err) {
           showError("Failed to create folder");
         });
@@ -439,7 +443,7 @@
       const path = btn.dataset.path;
       puter.fs.delete(path).then(function () {
         closeModal();
-        loadDir();
+        loadCurrentDirectory();
       }).catch(function (err) {
         showError("Delete failed");
         closeModal();
@@ -473,9 +477,9 @@
   document
     .getElementById("btn-new-folder")
     .addEventListener("click", function () {
-      openFormDialog({
+      openActionDialog({
         type: "newFolder",
-        currentPath: currentPath,
+        currentDirectoryPath: currentDirectoryPath,
         value: "",
       });
     });
@@ -485,15 +489,16 @@
   });
   uploadInput.addEventListener("change", function () {
     if (!uploadInput.files || uploadInput.files.length === 0) return;
-    const dirPath = currentPath === APP_ROOT ? APP_ROOT : currentPath;
+    const targetDirectoryPath =
+      currentDirectoryPath === ROOT_PATH ? ROOT_PATH : currentDirectoryPath;
     puter.fs
-      .upload(uploadInput.files, dirPath)
+      .upload(uploadInput.files, targetDirectoryPath)
       .then(function () {
         uploadInput.value = "";
-        loadDir();
+        loadCurrentDirectory();
       })
       .catch(function (err) {
-if (isAuthError(err)) {
+        if (isAuthError(err)) {
             contentEl.innerHTML =
               '<div class="empty-state">Sign in with Puter to upload files.</div>';
             showError("Please sign in to continue");
@@ -504,5 +509,5 @@ if (isAuthError(err)) {
       });
   });
 
-  initAuth();
+  initializeTwDrive();
 })();
