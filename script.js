@@ -313,36 +313,123 @@
       });
   }
 
+  function openFormDialog(opts) {
+    const titles = {
+      rename: "Rename",
+      move: "Move to",
+      newFolder: "New folder",
+    };
+    const labels = {
+      rename: "New name",
+      move: "Directory path",
+      newFolder: "Folder name",
+    };
+    const placeholders = {
+      rename: "",
+      move: ". or folder name",
+      newFolder: "Folder name",
+    };
+    const primaryLabels = {
+      rename: "Rename",
+      move: "Move",
+      newFolder: "Create",
+    };
+    const type = opts.type;
+    const value = opts.value || "";
+    modalTitle.textContent = titles[type];
+    modalBody.innerHTML =
+      '<label for="modal-input" class="modal-form-label">' +
+      escapeHtml(labels[type]) +
+      "</label>" +
+      '<input type="text" id="modal-input" class="modal-form-input" value="' +
+      escapeAttr(value) +
+      '" placeholder="' +
+      escapeAttr(placeholders[type]) +
+      '" autocomplete="off">';
+    modalFooter.innerHTML =
+      '<button type="button" class="btn" id="modal-cancel"><i class="fa-solid fa-xmark" aria-hidden="true"></i><span>Cancel</span></button>' +
+      '<button type="button" class="btn btn-primary" id="modal-confirm"><i class="fa-solid fa-check" aria-hidden="true"></i><span>' +
+      primaryLabels[type] +
+      "</span></button>";
+    modalDialog.showModal();
+
+    const inputEl = document.getElementById("modal-input");
+    inputEl.focus();
+    inputEl.select();
+
+    document.getElementById("modal-cancel").addEventListener("click", closeModal);
+    function submitFormDialog() {
+      const val = inputEl.value.trim();
+      if (!val) {
+        showError("Please enter a value");
+        return;
+      }
+      if (type === "rename") {
+        const parent = opts.path.split("/").slice(0, -1).join("/") || APP_ROOT;
+        const newPath =
+          parent === APP_ROOT ? val : parent + "/" + val;
+        puter.fs
+          .rename(opts.path, newPath)
+          .then(function () {
+            closeModal();
+            loadDir();
+          })
+          .catch(function (err) {
+            showError("Rename failed");
+          });
+      } else if (type === "move") {
+        puter.fs
+          .move(opts.path, val)
+          .then(function () {
+            closeModal();
+            loadDir();
+          })
+          .catch(function (err) {
+            showError("Move failed");
+          });
+      } else if (type === "newFolder") {
+        const fullPath =
+          opts.currentPath === APP_ROOT ? val : opts.currentPath + "/" + val;
+        puter.fs
+          .mkdir(fullPath)
+          .then(function () {
+            closeModal();
+            loadDir();
+          })
+          .catch(function (err) {
+            if (isAuthError(err)) {
+              contentEl.innerHTML =
+                '<div class="empty-state">Sign in with Puter to create folders.</div>';
+              showError("Please sign in to continue");
+            } else {
+              showError("Could not create folder");
+            }
+            closeModal();
+          });
+      }
+    }
+
+    document.getElementById("modal-confirm").addEventListener("click", submitFormDialog);
+    inputEl.addEventListener("keydown", function (e) {
+      if (e.key === "Enter") {
+        e.preventDefault();
+        submitFormDialog();
+      }
+    });
+  }
+
   function renameItem(path) {
     const name = path.split("/").filter(Boolean).pop() || path;
-    const newName = prompt("Rename to:", name);
-    if (newName === null || newName.trim() === "") return;
-    const parent = path.split("/").slice(0, -1).join("/") || APP_ROOT;
-    const newPath =
-      parent === APP_ROOT ? newName.trim() : parent + "/" + newName.trim();
-
-    puter.fs
-      .rename(path, newPath)
-      .then(function () {
-        loadDir();
-      })
-      .catch(function (err) {
-        showError("Rename failed");
-      });
+    openFormDialog({ type: "rename", path: path, value: name });
   }
 
   function moveItem(path) {
-    const destPath = prompt("Move to directory (e.g. . or folder):", APP_ROOT);
-    if (destPath === null) return;
-    const dest = destPath.trim() || APP_ROOT;
-    puter.fs
-      .move(path, dest)
-      .then(function () {
-        loadDir();
-      })
-      .catch(function (err) {
-        showError("Move failed");
-      });
+    openFormDialog({
+      type: "move",
+      path: path,
+      value: APP_ROOT,
+      currentPath: currentPath,
+    });
   }
 
   function closeModal() {
@@ -361,26 +448,11 @@
   document
     .getElementById("btn-new-folder")
     .addEventListener("click", function () {
-      const name = prompt("Folder name:");
-      if (name === null || name.trim() === "") return;
-      const fullPath =
-        currentPath === APP_ROOT
-          ? name.trim()
-          : currentPath + "/" + name.trim();
-      puter.fs
-        .mkdir(fullPath)
-        .then(function () {
-          loadDir();
-        })
-        .catch(function (err) {
-          if (isAuthError(err)) {
-            contentEl.innerHTML =
-              '<div class="empty-state">Sign in with Puter to create folders.</div>';
-            showError("Please sign in to continue");
-          } else {
-            showError("Could not create folder");
-          }
-        });
+      openFormDialog({
+        type: "newFolder",
+        currentPath: currentPath,
+        value: "",
+      });
     });
 
   document.getElementById("btn-upload").addEventListener("click", function () {
