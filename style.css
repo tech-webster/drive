@@ -506,10 +506,13 @@ body::before {
     0 24px 48px rgba(0, 0, 0, 0.4),
     0 0 0 1px var(--color-border);
   overflow: hidden;
-  display: flex;
-  flex-direction: column;
   overscroll-behavior: contain;
   animation: modalIn 0.25s var(--ease-out);
+}
+
+.modal-dialog[open] {
+  display: flex;
+  flex-direction: column;
 }
 
 .modal-dialog::backdrop {
