@@ -9,6 +9,46 @@
   const modalFooter = document.getElementById("modal-footer");
   const modalClose = document.getElementById("modal-close");
   const uploadInput = document.getElementById("upload-input");
+  const classes = {
+    breadcrumbLink:
+      "rounded-[6px] px-2 py-1 text-drive-accent no-underline transition-colors duration-150 hover:bg-drive-accent/15 hover:text-drive-accent-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-drive-accent motion-reduce:transition-none",
+    breadcrumbCurrent: "font-medium text-drive-text",
+    breadcrumbSlash: "text-drive-muted",
+    emptyState:
+      "rounded-[14px] border border-dashed border-drive-border-strong bg-drive-surface px-6 py-8 text-center text-[0.9375rem] text-drive-muted shadow-[0_4px_24px_rgba(0,0,0,0.25)]",
+    loading: "p-8 text-center text-[0.9375rem] text-drive-muted",
+    errorToast:
+      "fixed left-1/2 bottom-6 z-[1001] rounded-[10px] bg-drive-text px-6 py-3 text-sm font-medium text-drive-bg shadow-[0_12px_40px_rgba(0,0,0,0.4)] -translate-x-1/2",
+    fileList:
+      "m-0 list-none overflow-hidden rounded-[14px] border border-drive-border bg-drive-surface p-0 shadow-[0_4px_24px_rgba(0,0,0,0.25)]",
+    fileItem:
+      "flex min-h-14 items-center gap-4 border-b border-drive-border px-4 py-3 transition-colors duration-150 hover:bg-drive-surface-hover motion-reduce:transition-none last:border-b-0",
+    fileIcon: "flex w-10 shrink-0 items-center justify-center text-drive-muted",
+    folderIcon: "text-xl text-drive-accent",
+    fileIconGlyph: "text-xl",
+    fileName:
+      "m-0 flex-1 rounded-[6px] border-0 bg-transparent px-0 py-1 text-left font-medium text-inherit outline-none transition-colors duration-150 hover:text-drive-accent focus-visible:ring-2 focus-visible:ring-drive-accent motion-reduce:transition-none",
+    fileMeta: "shrink-0 text-xs text-drive-muted max-[600px]:hidden",
+    fileActions: "flex shrink-0 items-center gap-1",
+    fileActionButton:
+      "inline-flex cursor-pointer items-center justify-center rounded-[6px] border-0 bg-transparent p-2 text-drive-muted transition-colors duration-150 hover:bg-drive-surface-hover hover:text-drive-text focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-drive-accent motion-reduce:transition-none",
+    deleteButton: "hover:bg-drive-danger/12 hover:text-drive-danger",
+    previewImage: "block max-h-[70vh] max-w-full rounded-[6px]",
+    previewText:
+      "max-h-[60vh] overflow-auto whitespace-pre-wrap break-words text-sm leading-[1.6] text-drive-text",
+    modalText: "text-drive-muted",
+    modalLabel: "mb-2 block text-sm font-medium text-drive-text",
+    modalInput:
+      "w-full rounded-[10px] border border-drive-border-strong bg-drive-panel px-3 py-2 text-[0.9375rem] text-drive-text outline-none placeholder:text-drive-faint focus:border-drive-accent focus:ring-2 focus:ring-drive-accent/15",
+    buttonBase:
+      "inline-flex cursor-pointer items-center gap-2 rounded-[10px] border px-4 py-2 text-sm font-medium touch-manipulation transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-drive-accent motion-reduce:transition-none",
+    buttonNeutral:
+      "border-drive-border-strong bg-drive-surface text-drive-text hover:border-drive-muted hover:bg-drive-surface-hover",
+    buttonPrimary:
+      "border-drive-accent bg-drive-accent text-drive-bg hover:border-drive-accent-hover hover:bg-drive-accent-hover",
+    buttonDanger:
+      "border-drive-danger bg-drive-danger text-white hover:border-drive-danger-hover hover:bg-drive-danger-hover",
+  };
 
   function isAuthError(err) {
     if (!err) return false;
@@ -30,14 +70,16 @@
       loadCurrentDirectory();
     } else {
       contentEl.innerHTML =
-        '<div class="empty-state">Sign in with Puter in another tab or window to use TW Drive here.</div>';
+        '<div class="' +
+        classes.emptyState +
+        '">Sign in with Puter in another tab or window to use TW Drive here.</div>';
       renderBreadcrumbTrail();
     }
   }
 
   function showError(message) {
     const el = document.createElement("div");
-    el.className = "error-toast";
+    el.className = classes.errorToast;
     el.setAttribute("aria-live", "polite");
     el.textContent = message;
     document.body.appendChild(el);
@@ -49,12 +91,21 @@
   function renderBreadcrumbTrail() {
     var parts =
       currentDirectoryPath === ROOT_PATH ? [] : currentDirectoryPath.split("/");
-    var html = '<a href="#" data-path="' + escapeAttr(ROOT_PATH) + '">Home</a>';
+    var html =
+      '<a href="#" class="' +
+      classes.breadcrumbLink +
+      '" data-path="' +
+      escapeAttr(ROOT_PATH) +
+      '">Home</a>';
     var acc = "";
     parts.forEach(function (name) {
       acc = acc ? acc + "/" + name : name;
       html +=
-        ' <span>/</span> <a href="#" data-path="' +
+        ' <span class="' +
+        classes.breadcrumbSlash +
+        '">/</span> <a href="#" class="' +
+        classes.breadcrumbLink +
+        '" data-path="' +
         escapeAttr(acc) +
         '">' +
         escapeHtml(name) +
@@ -62,14 +113,22 @@
     });
     if (parts.length > 0) {
       html +=
-        ' <span>/</span> <span class="current">' +
+        ' <span class="' +
+        classes.breadcrumbSlash +
+        '">/</span> <span class="' +
+        classes.breadcrumbCurrent +
+        '">' +
         escapeHtml(parts[parts.length - 1]) +
         "</span>";
     } else {
       html =
-        '<a href="#" data-path="' +
+        '<a href="#" class="' +
+        classes.breadcrumbLink +
+        '" data-path="' +
         escapeAttr(ROOT_PATH) +
-        '">Home</a> <span class="current">/</span>';
+        '">Home</a> <span class="' +
+        classes.breadcrumbCurrent +
+        '">/</span>';
     }
     breadcrumbEl.innerHTML = html;
     breadcrumbEl.querySelectorAll("a").forEach(function (a) {
@@ -139,9 +198,19 @@
     );
   }
 
+  function buttonClasses(variant) {
+    if (variant === "primary") {
+      return classes.buttonBase + " " + classes.buttonPrimary;
+    }
+    if (variant === "danger") {
+      return classes.buttonBase + " " + classes.buttonDanger;
+    }
+    return classes.buttonBase + " " + classes.buttonNeutral;
+  }
+
   function loadCurrentDirectory() {
     contentEl.innerHTML =
-      '<div class="loading" aria-live="polite">Loading…</div>';
+      '<div class="' + classes.loading + '" aria-live="polite">Loading…</div>';
     renderBreadcrumbTrail();
 
     puter.fs
@@ -149,13 +218,16 @@
       .then(function (items) {
         if (items.length === 0) {
           contentEl.innerHTML =
-            '<div class="empty-state">This folder is empty. Create a folder or upload a file.</div>';
+            '<div class="' +
+            classes.emptyState +
+            '">This folder is empty. Create a folder or upload a file.</div>';
           return;
         }
         const ul = document.createElement("ul");
-        ul.className = "file-list";
+        ul.className = classes.fileList;
         items.forEach(function (item) {
           const li = document.createElement("li");
+          li.className = classes.fileItem;
           const isDir = item.is_dir === true;
           const iconClass = isDir
             ? "fa-solid fa-folder"
@@ -165,35 +237,55 @@
             item.path.split("/").filter(Boolean).pop() ||
             item.path;
           li.innerHTML =
-            '<span class="icon" aria-hidden="true"><i class="' +
+            '<span class="' +
+            classes.fileIcon +
+            '" aria-hidden="true"><i class="' +
             iconClass +
+            " " +
+            (isDir ? classes.folderIcon : classes.fileIconGlyph) +
             '"></i></span>' +
-            '<button type="button" class="name" data-path="' +
+            '<button type="button" data-role="item-name" class="' +
+            classes.fileName +
+            '" data-path="' +
             escapeAttr(item.path) +
             '" data-isdir="' +
             (isDir ? "1" : "0") +
             '">' +
             escapeHtml(name) +
             "</button>" +
-            '<span class="meta">' +
+            '<span class="' +
+            classes.fileMeta +
+            '">' +
             (item.size !== undefined ? formatSize(item.size) : "—") +
             " · " +
             formatDate(item.created) +
             "</span>" +
-            '<div class="actions">' +
+            '<div class="' +
+            classes.fileActions +
+            '">' +
             (isDir
               ? ""
-              : '<button type="button" class="open" aria-label="Open file"><i class="fa-solid fa-up-right-from-square" aria-hidden="true"></i></button>') +
-            '<button type="button" class="rename" aria-label="Rename"><i class="fa-solid fa-pen" aria-hidden="true"></i></button>' +
-            '<button type="button" class="move" aria-label="Move"><i class="fa-solid fa-arrows-up-down-left-right" aria-hidden="true"></i></button>' +
-            '<button type="button" class="delete" aria-label="Delete"><i class="fa-solid fa-trash" aria-hidden="true"></i></button>' +
+              : '<button type="button" data-action="open" class="' +
+                classes.fileActionButton +
+                '" aria-label="Open file"><i class="fa-solid fa-up-right-from-square text-sm" aria-hidden="true"></i></button>') +
+            '<button type="button" data-action="rename" class="' +
+            classes.fileActionButton +
+            '" aria-label="Rename"><i class="fa-solid fa-pen text-sm" aria-hidden="true"></i></button>' +
+            '<button type="button" data-action="move" class="' +
+            classes.fileActionButton +
+            '" aria-label="Move"><i class="fa-solid fa-arrows-up-down-left-right text-sm" aria-hidden="true"></i></button>' +
+            '<button type="button" data-action="delete" class="' +
+            classes.fileActionButton +
+            " " +
+            classes.deleteButton +
+            '" aria-label="Delete"><i class="fa-solid fa-trash text-sm" aria-hidden="true"></i></button>' +
             "</div>";
           ul.appendChild(li);
         });
         contentEl.innerHTML = "";
         contentEl.appendChild(ul);
 
-        ul.querySelectorAll(".name").forEach(function (el) {
+        ul.querySelectorAll('[data-role="item-name"]').forEach(function (el) {
           el.addEventListener("click", function () {
             const path = this.getAttribute("data-path");
             const isDir = this.getAttribute("data-isdir") === "1";
@@ -205,42 +297,42 @@
             }
           });
         });
-        ul.querySelectorAll("button.open").forEach(function (btn) {
+        ul.querySelectorAll('[data-action="open"]').forEach(function (btn) {
           btn.addEventListener("click", function (e) {
             e.stopPropagation();
             const path = e.target
               .closest("li")
-              .querySelector(".name")
+              .querySelector('[data-role="item-name"]')
               .getAttribute("data-path");
             openFilePreview(path);
           });
         });
-        ul.querySelectorAll("button.rename").forEach(function (btn) {
+        ul.querySelectorAll('[data-action="rename"]').forEach(function (btn) {
           btn.addEventListener("click", function (e) {
             e.stopPropagation();
             const path = e.target
               .closest("li")
-              .querySelector(".name")
+              .querySelector('[data-role="item-name"]')
               .getAttribute("data-path");
             openRenameDialog(path);
           });
         });
-        ul.querySelectorAll("button.move").forEach(function (btn) {
+        ul.querySelectorAll('[data-action="move"]').forEach(function (btn) {
           btn.addEventListener("click", function (e) {
             e.stopPropagation();
             const path = e.target
               .closest("li")
-              .querySelector(".name")
+              .querySelector('[data-role="item-name"]')
               .getAttribute("data-path");
             openMoveDialog(path);
           });
         });
-        ul.querySelectorAll("button.delete").forEach(function (btn) {
+        ul.querySelectorAll('[data-action="delete"]').forEach(function (btn) {
           btn.addEventListener("click", function (e) {
             e.stopPropagation();
             const path = e.target
               .closest("li")
-              .querySelector(".name")
+              .querySelector('[data-role="item-name"]')
               .getAttribute("data-path");
             openDeleteDialog(path);
           });
@@ -249,11 +341,15 @@
       .catch(function (err) {
         if (isAuthError(err)) {
           contentEl.innerHTML =
-            '<div class="empty-state">Sign in with Puter to access this folder.</div>';
+            '<div class="' +
+            classes.emptyState +
+            '">Sign in with Puter to access this folder.</div>';
           showError("Please sign in to continue");
         } else {
           contentEl.innerHTML =
-            '<div class="empty-state">Could not load folder. ' +
+            '<div class="' +
+            classes.emptyState +
+            '">Could not load folder. ' +
             escapeHtml(String(err && err.message ? err.message : err)) +
             "</div>";
           showError("Could not load folder");
@@ -264,7 +360,7 @@
   function openFilePreview(path) {
     modalTitle.textContent = path.split("/").filter(Boolean).pop() || path;
     modalBody.innerHTML =
-      '<div class="loading" aria-live="polite">Loading…</div>';
+      '<div class="' + classes.loading + '" aria-live="polite">Loading…</div>';
     modalFooter.innerHTML = "";
     modalDialog.showModal();
 
@@ -277,7 +373,11 @@
           if (isImage) {
             return createImagePreviewUrl(fileData, name).then(function (url) {
               modalBody.innerHTML =
-                '<img class="preview-image" src="' + url + '" alt="Preview">';
+                '<img class="' +
+                classes.previewImage +
+                '" src="' +
+                url +
+                '" alt="Preview">';
               modalDialog.addEventListener(
                 "modal-close-cleanup",
                 function cleanup() {
@@ -293,11 +393,17 @@
           } else if (/\.(txt|md|json|js|css|html|log)$/i.test(name)) {
             toTextContent(fileData).then(function (text) {
               modalBody.innerHTML =
-                '<pre class="preview-text">' + escapeHtml(text) + "</pre>";
+                '<pre class="' +
+                classes.previewText +
+                '">' +
+                escapeHtml(text) +
+                "</pre>";
             });
           } else {
             modalBody.innerHTML =
-              "<p>Preview not available. File: " +
+              '<p class="' +
+              classes.modalText +
+              '">Preview not available. File: ' +
               escapeHtml(name) +
               " (" +
               formatSize(stat.size) +
@@ -307,7 +413,9 @@
       })
       .catch(function (err) {
         modalBody.innerHTML =
-          "<p>Could not open file. " +
+          '<p class="' +
+          classes.modalText +
+          '">Could not open file. ' +
           escapeHtml(String(err && err.message ? err.message : err)) +
           "</p>";
         showError("Could not open file");
@@ -318,13 +426,19 @@
     const name = path.split("/").filter(Boolean).pop() || path;
     modalTitle.textContent = "Delete?";
     modalBody.innerHTML =
-      "<p>Delete <strong>" +
+      '<p class="' +
+      classes.modalText +
+      '">Delete <strong>' +
       escapeHtml(name) +
       "</strong>? This cannot be undone.</p>";
     modalFooter.innerHTML =
-      '<button type="button" class="btn" id="modal-cancel"><i class="fa-solid fa-xmark" aria-hidden="true"></i><span>Cancel</span></button><button type="button" class="btn btn-danger" id="modal-confirm-delete" data-path="' +
+      '<button type="button" class="' +
+      buttonClasses("neutral") +
+      '" id="modal-cancel"><i class="fa-solid fa-xmark text-sm" aria-hidden="true"></i><span>Cancel</span></button><button type="button" class="' +
+      buttonClasses("danger") +
+      '" id="modal-confirm-delete" data-path="' +
       escapeAttr(path) +
-      '"><i class="fa-solid fa-trash" aria-hidden="true"></i><span>Delete</span></button>';
+      '"><i class="fa-solid fa-trash text-sm" aria-hidden="true"></i><span>Delete</span></button>';
     modalDialog.showModal();
   }
 
@@ -353,10 +467,14 @@
     const value = options.value || "";
     modalTitle.textContent = dialogTitles[actionType];
     modalBody.innerHTML =
-      '<label for="modal-input" class="modal-form-label">' +
+      '<label for="modal-input" class="' +
+      classes.modalLabel +
+      '">' +
       escapeHtml(fieldLabels[actionType]) +
       "</label>" +
-      '<input type="text" id="modal-input" class="modal-form-input" value="' +
+      '<input type="text" id="modal-input" class="' +
+      classes.modalInput +
+      '" value="' +
       escapeAttr(value) +
       '" placeholder="' +
       escapeAttr(fieldPlaceholders[actionType]) +
@@ -364,8 +482,12 @@
       (options.path ? ' data-path="' + escapeAttr(options.path) + '"' : "") +
       ">";
     modalFooter.innerHTML =
-      '<button type="button" class="btn" id="modal-cancel"><i class="fa-solid fa-xmark" aria-hidden="true"></i><span>Cancel</span></button>' +
-      '<button type="button" class="btn btn-primary" id="modal-confirm"><i class="fa-solid fa-check" aria-hidden="true"></i><span>' +
+      '<button type="button" class="' +
+      buttonClasses("neutral") +
+      '" id="modal-cancel"><i class="fa-solid fa-xmark text-sm" aria-hidden="true"></i><span>Cancel</span></button>' +
+      '<button type="button" class="' +
+      buttonClasses("primary") +
+      '" id="modal-confirm"><i class="fa-solid fa-check text-sm" aria-hidden="true"></i><span>' +
       primaryButtonLabels[actionType] +
       "</span></button>";
     modalDialog.showModal();
@@ -385,7 +507,6 @@
       type: "move",
       path: path,
       value: ROOT_PATH,
-      currentDirectoryPath: currentDirectoryPath,
     });
   }
 
@@ -479,7 +600,6 @@
     .addEventListener("click", function () {
       openActionDialog({
         type: "newFolder",
-        currentDirectoryPath: currentDirectoryPath,
         value: "",
       });
     });
@@ -500,7 +620,9 @@
       .catch(function (err) {
         if (isAuthError(err)) {
             contentEl.innerHTML =
-              '<div class="empty-state">Sign in with Puter to upload files.</div>';
+              '<div class="' +
+              classes.emptyState +
+              '">Sign in with Puter to upload files.</div>';
             showError("Please sign in to continue");
           } else {
             showError("Upload failed");

@@ -1,0 +1,21 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Space Grotesk", system-ui, sans-serif;
+  --color-drive-bg: #0a0b0f;
+  --color-drive-panel: #14161f;
+  --color-drive-surface: #1a1d28;
+  --color-drive-surface-hover: #22262f;
+  --color-drive-border: #252830;
+  --color-drive-border-strong: #353945;
+  --color-drive-text: #e4e6eb;
+  --color-drive-muted: #8b8f99;
+  --color-drive-faint: #5c5f68;
+  --color-drive-accent: #ff7f02;
+  --color-drive-accent-hover: #ff9224;
+  --color-drive-danger: #e85d5d;
+  --color-drive-danger-hover: #ec7272;
+}
+
+@source "./index.html";
+@source "./script.js";

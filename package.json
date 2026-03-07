@@ -1,0 +1,23 @@
+{
+  "name": "tw-drive",
+  "version": "1.0.0",
+  "description": "TW Drive static app with Tailwind CLI build pipeline",
+  "main": "script.js",
+  "scripts": {
+    "build:css": "tailwindcss -i ./tw-source.css -o ./style.css",
+    "watch:css": "tailwindcss -i ./tw-source.css -o ./style.css --watch",
+    "build": "npm run build:css"
+  },
+  "keywords": [
+    "tailwindcss",
+    "static-site",
+    "tw-drive"
+  ],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "devDependencies": {
+    "@tailwindcss/cli": "^4.2.1",
+    "tailwindcss": "^4.2.1"
+  }
+}
