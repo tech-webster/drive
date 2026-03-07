@@ -3,13 +3,13 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="theme-color" content="#0a0b0f" />
+    <meta name="theme-color" content="#ff7f02" />
     <meta name="color-scheme" content="dark" />
-    <title>My Cloud Drive</title>
+    <title>TW Drive</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap"
       rel="stylesheet"
     />
     <link
@@ -23,7 +23,16 @@
   <body>
     <div class="app-wrap">
       <header class="header">
-        <h1 class="header__title">My Cloud Drive</h1>
+        <h1 class="header__title">
+          <img
+            src="https://www.techwebster.com/icon.svg"
+            alt="TW"
+            class="header__icon"
+            width="32"
+            height="32"
+          />
+          <span>Drive</span>
+        </h1>
         <div class="toolbar">
           <button type="button" class="btn btn-primary" id="btn-new-folder">
             <i class="fa-solid fa-folder-plus" aria-hidden="true"></i>
@@ -48,23 +57,21 @@
       </main>
     </div>
 
-    <div class="modal-overlay hidden" id="modal-overlay">
-      <div class="modal">
-        <div class="modal-header">
-          <h2 id="modal-title">Preview</h2>
-          <button
-            type="button"
-            class="modal-close"
-            id="modal-close"
-            aria-label="Close"
-          >
-            <i class="fa-solid fa-xmark" aria-hidden="true"></i>
-          </button>
-        </div>
-        <div class="modal-body" id="modal-body"></div>
-        <div class="modal-footer" id="modal-footer"></div>
+    <dialog id="app-dialog" class="modal-dialog" aria-labelledby="modal-title">
+      <div class="modal-header">
+        <h2 id="modal-title">Preview</h2>
+        <button
+          type="button"
+          class="modal-close"
+          id="modal-close"
+          aria-label="Close"
+        >
+          <i class="fa-solid fa-xmark" aria-hidden="true"></i>
+        </button>
       </div>
-    </div>
+      <div class="modal-body" id="modal-body"></div>
+      <div class="modal-footer" id="modal-footer"></div>
+    </dialog>
 
     <script src="https://js.puter.com/v2/"></script>
     <script src="script.js"></script>

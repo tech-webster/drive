@@ -3,7 +3,7 @@
   let currentPath = APP_ROOT;
   const contentEl = document.getElementById("content");
   const breadcrumbEl = document.getElementById("breadcrumb");
-  const modalOverlay = document.getElementById("modal-overlay");
+  const modalDialog = document.getElementById("app-dialog");
   const modalTitle = document.getElementById("modal-title");
   const modalBody = document.getElementById("modal-body");
   const modalFooter = document.getElementById("modal-footer");
@@ -236,7 +236,7 @@
     modalBody.innerHTML =
       '<div class="loading" aria-live="polite">Loading…</div>';
     modalFooter.innerHTML = "";
-    modalOverlay.classList.remove("hidden");
+    modalDialog.showModal();
 
     puter.fs
       .stat(path)
@@ -248,11 +248,11 @@
             const url = URL.createObjectURL(blob);
             modalBody.innerHTML =
               '<img class="preview-image" src="' + url + '" alt="Preview">';
-            modalOverlay.addEventListener(
+            modalDialog.addEventListener(
               "modal-close-cleanup",
               function cleanup() {
                 URL.revokeObjectURL(url);
-                modalOverlay.removeEventListener(
+                modalDialog.removeEventListener(
                   "modal-close-cleanup",
                   cleanup,
                 );
@@ -292,7 +292,7 @@
       "</strong>? This cannot be undone.</p>";
     modalFooter.innerHTML =
       '<button type="button" class="btn" id="modal-cancel"><i class="fa-solid fa-xmark" aria-hidden="true"></i><span>Cancel</span></button><button type="button" class="btn btn-danger" id="modal-confirm-delete"><i class="fa-solid fa-trash" aria-hidden="true"></i><span>Delete</span></button>';
-    modalOverlay.classList.remove("hidden");
+    modalDialog.showModal();
 
     document
       .getElementById("modal-cancel")
@@ -346,13 +346,16 @@
   }
 
   function closeModal() {
-    modalOverlay.classList.add("hidden");
-    modalOverlay.dispatchEvent(new Event("modal-close-cleanup"));
+    modalDialog.close();
+    modalDialog.dispatchEvent(new Event("modal-close-cleanup"));
   }
 
   modalClose.addEventListener("click", closeModal);
-  modalOverlay.addEventListener("click", function (e) {
-    if (e.target === modalOverlay) closeModal();
+  modalDialog.addEventListener("click", function (e) {
+    if (e.target === modalDialog) closeModal();
+  });
+  modalDialog.addEventListener("close", function () {
+    modalDialog.dispatchEvent(new Event("modal-close-cleanup"));
   });
 
   document

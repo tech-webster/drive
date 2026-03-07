@@ -4,10 +4,8 @@
    ========================================================================== */
 
 :root {
-  /* Typography */
-  --font-display: "Instrument Serif", Georgia, serif;
-  --font-sans: "Outfit", system-ui, sans-serif;
-  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+  /* Typography — modern Google font */
+  --font-sans: "Plus Jakarta Sans", system-ui, sans-serif;
 
   /* Dark palette */
   --color-bg: #0a0b0f;
@@ -21,11 +19,11 @@
   --color-text-muted: #8b8f99;
   --color-text-faint: #5c5f68;
 
-  /* Accent — warm amber */
-  --color-primary: #e4a853;
-  --color-primary-hover: #eab96a;
-  --color-primary-dim: rgba(228, 168, 83, 0.15);
-  --color-primary-glow: rgba(228, 168, 83, 0.2);
+  /* Accent — orange */
+  --color-primary: #ff7f02;
+  --color-primary-hover: #ff9224;
+  --color-primary-dim: rgba(255, 127, 2, 0.15);
+  --color-primary-glow: rgba(255, 127, 2, 0.2);
 
   /* Danger */
   --color-danger: #e85d5d;
@@ -133,12 +131,23 @@ body::before {
 .header__title,
 .header h1 {
   margin: 0;
-  font-family: var(--font-display);
+  font-family: var(--font-sans);
   font-size: 1.625rem;
   font-weight: 400;
   letter-spacing: -0.02em;
   color: var(--color-text);
   text-wrap: balance;
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.header__icon {
+  display: block;
+  width: 2rem;
+  height: 2rem;
+  object-fit: contain;
+  flex-shrink: 0;
 }
 
 .toolbar {
@@ -239,7 +248,7 @@ body::before {
   align-items: center;
   flex-wrap: wrap;
   gap: var(--space-1);
-  font-family: var(--font-mono);
+  font-family: var(--font-sans);
   font-size: 0.8125rem;
   min-height: 48px;
   animation: fadeIn 0.35s var(--ease-out) 0.05s backwards;
@@ -363,7 +372,7 @@ body::before {
 }
 
 .file-list .meta {
-  font-family: var(--font-mono);
+  font-family: var(--font-sans);
   font-size: 0.75rem;
   color: var(--color-text-muted);
   font-variant-numeric: tabular-nums;
@@ -473,40 +482,29 @@ body::before {
 }
 
 /* --------------------------------------------------------------------------
-   Modal
+   Modal — native <dialog> element
    -------------------------------------------------------------------------- */
-.modal-overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.7);
-  backdrop-filter: blur(8px);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 1000;
-  padding: var(--space-4);
-  overscroll-behavior: contain;
-  animation: fadeIn 0.2s var(--ease-out);
-}
-
-.modal-overlay.hidden {
-  display: none;
-}
-
-.modal {
-  background: var(--color-surface);
-  border-radius: var(--radius-xl);
+.modal-dialog {
+  margin: auto;
+  padding: 0;
   max-width: 90vw;
   max-height: 85vh;
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-xl);
+  background: var(--color-surface);
   box-shadow:
     0 24px 48px rgba(0, 0, 0, 0.4),
     0 0 0 1px var(--color-border);
-  border: 1px solid var(--color-border);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
   overscroll-behavior: contain;
   animation: modalIn 0.25s var(--ease-out);
+}
+
+.modal-dialog::backdrop {
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(8px);
 }
 
 @keyframes modalIn {
@@ -580,7 +578,7 @@ body::before {
 .modal-body .preview-text {
   white-space: pre-wrap;
   word-break: break-word;
-  font-family: var(--font-mono);
+  font-family: var(--font-sans);
   font-size: 0.875rem;
   line-height: 1.6;
   max-height: 60vh;
@@ -636,8 +634,7 @@ body::before {
   .auth-prompt,
   .breadcrumb,
   .main,
-  .modal,
-  .modal-overlay,
+  .modal-dialog,
   .error-toast {
     animation: none;
   }
