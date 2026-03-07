@@ -9,6 +9,11 @@
   const modalFooter = document.getElementById("modal-footer");
   const modalClose = document.getElementById("modal-close");
   const uploadInput = document.getElementById("upload-input");
+  const searchForm = document.getElementById("search-form");
+  const searchInput = document.getElementById("search-input");
+  const searchClear = document.getElementById("search-clear");
+  let currentDirectoryItems = [];
+  let currentSearchQuery = "";
   const classes = {
     breadcrumbLink:
       "rounded-[6px] px-2 py-1 text-drive-accent no-underline transition-colors duration-150 hover:bg-drive-accent/15 hover:text-drive-accent-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-drive-accent motion-reduce:transition-none",
@@ -16,6 +21,7 @@
     breadcrumbSlash: "text-drive-muted",
     emptyState:
       "rounded-[14px] border border-dashed border-drive-border-strong bg-drive-surface px-6 py-8 text-center text-[0.9375rem] text-drive-muted shadow-[0_4px_24px_rgba(0,0,0,0.25)]",
+    searchMeta: "mt-2 text-xs text-drive-faint",
     loading: "p-8 text-center text-[0.9375rem] text-drive-muted",
     errorToast:
       "fixed left-1/2 bottom-6 z-[3000] rounded-[10px] bg-drive-text px-6 py-3 text-sm font-medium text-drive-bg shadow-[0_12px_40px_rgba(0,0,0,0.4)] -translate-x-1/2",
@@ -302,6 +308,41 @@
     return classes.buttonBase + " " + classes.buttonNeutral;
   }
 
+  function emptyStateMarkup(message, detail) {
+    return (
+      '<div class="' +
+      classes.emptyState +
+      '">' +
+      escapeHtml(message) +
+      (detail
+        ? '<p class="' + classes.searchMeta + '">' + escapeHtml(detail) + "</p>"
+        : "") +
+      "</div>"
+    );
+  }
+
+  function normalizeSearchQuery(value) {
+    return value.trim().toLowerCase();
+  }
+
+  function setSearchUiState() {
+    const hasQuery = currentSearchQuery.length > 0;
+    searchClear.hidden = !hasQuery;
+    searchForm.setAttribute("data-has-query", hasQuery ? "true" : "false");
+  }
+
+  function getFilteredDirectoryItems() {
+    if (!currentSearchQuery) return currentDirectoryItems;
+    return currentDirectoryItems.filter(function (item) {
+      const name =
+        item.name ||
+        item.path.split("/").filter(Boolean).pop() ||
+        item.path ||
+        "";
+      return name.toLowerCase().includes(currentSearchQuery);
+    });
+  }
+
   function iconActionButtonMarkup(config) {
     const buttonClass =
       classes.fileActionButton + (config.extraClass ? " " + config.extraClass : "");
@@ -337,13 +378,43 @@
     puter.fs
       .readdir(currentDirectoryPath)
       .then(function (items) {
-        if (items.length === 0) {
-          contentEl.innerHTML =
-            '<div class="' +
-            classes.emptyState +
-            '">This folder is empty. Create a folder or upload a file.</div>';
-          return;
+        currentDirectoryItems = items;
+        renderDirectoryItems();
+      })
+      .catch(function (err) {
+        currentDirectoryItems = [];
+        if (isAuthError(err)) {
+          contentEl.innerHTML = emptyStateMarkup(
+            "Sign in with Puter to access this folder.",
+          );
+          showError("Please sign in to continue");
+        } else {
+          contentEl.innerHTML = emptyStateMarkup(
+            "Could not load folder.",
+            String(err && err.message ? err.message : err),
+          );
+          showError("Could not load folder");
         }
+      });
+  }
+
+  function renderDirectoryItems() {
+    if (currentDirectoryItems.length === 0) {
+      contentEl.innerHTML = emptyStateMarkup(
+        "This folder is empty. Create a folder or upload a file.",
+      );
+      return;
+    }
+
+    const items = getFilteredDirectoryItems();
+    if (items.length === 0) {
+      contentEl.innerHTML = emptyStateMarkup(
+        "No matching items found.",
+        'Try a different search for "' + currentSearchQuery + '".',
+      );
+      return;
+    }
+
         const ul = document.createElement("ul");
         ul.className = classes.fileList;
         items.forEach(function (item) {
@@ -450,24 +521,6 @@
             openDeleteDialog(path);
           });
         });
-      })
-      .catch(function (err) {
-        if (isAuthError(err)) {
-          contentEl.innerHTML =
-            '<div class="' +
-            classes.emptyState +
-            '">Sign in with Puter to access this folder.</div>';
-          showError("Please sign in to continue");
-        } else {
-          contentEl.innerHTML =
-            '<div class="' +
-            classes.emptyState +
-            '">Could not load folder. ' +
-            escapeHtml(String(err && err.message ? err.message : err)) +
-            "</div>";
-          showError("Could not load folder");
-        }
-      });
   }
 
   function openFilePreview(path) {
@@ -711,6 +764,30 @@
 
   document.getElementById("btn-upload").addEventListener("click", function () {
     uploadInput.click();
+  });
+  searchInput.addEventListener("input", function () {
+    currentSearchQuery = normalizeSearchQuery(searchInput.value);
+    setSearchUiState();
+    renderDirectoryItems();
+  });
+  searchInput.addEventListener("keydown", function (e) {
+    if (e.key === "Escape" && searchInput.value) {
+      e.preventDefault();
+      searchInput.value = "";
+      currentSearchQuery = "";
+      setSearchUiState();
+      renderDirectoryItems();
+    }
+  });
+  searchClear.addEventListener("click", function () {
+    searchInput.value = "";
+    currentSearchQuery = "";
+    setSearchUiState();
+    renderDirectoryItems();
+    searchInput.focus();
+  });
+  searchForm.addEventListener("submit", function (e) {
+    e.preventDefault();
   });
   uploadInput.addEventListener("change", function () {
     if (!uploadInput.files || uploadInput.files.length === 0) return;
