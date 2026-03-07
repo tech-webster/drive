@@ -20,9 +20,9 @@
     errorToast:
       "fixed left-1/2 bottom-6 z-[1001] rounded-[10px] bg-drive-text px-6 py-3 text-sm font-medium text-drive-bg shadow-[0_12px_40px_rgba(0,0,0,0.4)] -translate-x-1/2",
     fileList:
-      "m-0 list-none overflow-hidden rounded-[14px] border border-drive-border bg-drive-surface p-0 shadow-[0_4px_24px_rgba(0,0,0,0.25)]",
+      "m-0 list-none rounded-[14px] border border-drive-border bg-drive-surface p-0 shadow-[0_4px_24px_rgba(0,0,0,0.25)]",
     fileItem:
-      "flex min-h-14 items-center gap-4 border-b border-drive-border px-4 py-3 transition-colors duration-150 hover:bg-drive-surface-hover motion-reduce:transition-none last:border-b-0",
+      "relative flex min-h-14 items-center gap-4 border-b border-drive-border px-4 py-3 transition-colors duration-150 hover:bg-drive-surface-hover motion-reduce:transition-none last:border-b-0 first:rounded-t-[14px] last:rounded-b-[14px]",
     fileIcon: "flex w-10 shrink-0 items-center justify-center text-drive-muted",
     folderIcon: "text-xl text-drive-accent",
     fileIconGlyph: "text-xl",
@@ -30,9 +30,12 @@
       "m-0 flex-1 rounded-[6px] border-0 bg-transparent px-0 py-1 text-left font-medium text-inherit outline-none transition-colors duration-150 hover:text-drive-accent focus-visible:ring-2 focus-visible:ring-drive-accent motion-reduce:transition-none",
     fileMeta: "shrink-0 text-xs text-drive-muted max-[600px]:hidden",
     fileActions: "flex shrink-0 items-center gap-1",
+    tooltipWrap: "group relative inline-flex",
     fileActionButton:
       "inline-flex cursor-pointer items-center justify-center rounded-[6px] border-0 bg-transparent p-2 text-drive-muted transition-colors duration-150 hover:bg-drive-surface-hover hover:text-drive-text focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-drive-accent motion-reduce:transition-none",
     deleteButton: "hover:bg-drive-danger/12 hover:text-drive-danger",
+    tooltip:
+      "pointer-events-none absolute right-0 bottom-full z-30 mb-2 hidden whitespace-nowrap rounded-[6px] border border-drive-border bg-drive-panel px-2 py-1 text-xs font-medium text-drive-text shadow-[0_8px_24px_rgba(0,0,0,0.35)] group-hover:block group-focus-within:block",
     previewImage: "block max-h-[70vh] max-w-full rounded-[6px]",
     previewText:
       "max-h-[60vh] overflow-auto whitespace-pre-wrap break-words text-sm leading-[1.6] text-drive-text",
@@ -98,18 +101,20 @@
       escapeAttr(ROOT_PATH) +
       '">Home</a>';
     var acc = "";
-    parts.forEach(function (name) {
+    parts.forEach(function (name, index) {
       acc = acc ? acc + "/" + name : name;
-      html +=
-        ' <span class="' +
-        classes.breadcrumbSlash +
-        '">/</span> <a href="#" class="' +
-        classes.breadcrumbLink +
-        '" data-path="' +
-        escapeAttr(acc) +
-        '">' +
-        escapeHtml(name) +
-        "</a>";
+      if (index < parts.length - 1) {
+        html +=
+          ' <span class="' +
+          classes.breadcrumbSlash +
+          '">/</span> <a href="#" class="' +
+          classes.breadcrumbLink +
+          '" data-path="' +
+          escapeAttr(acc) +
+          '">' +
+          escapeHtml(name) +
+          "</a>";
+      }
     });
     if (parts.length > 0) {
       html +=
@@ -208,6 +213,33 @@
     return classes.buttonBase + " " + classes.buttonNeutral;
   }
 
+  function iconActionButtonMarkup(config) {
+    const buttonClass =
+      classes.fileActionButton + (config.extraClass ? " " + config.extraClass : "");
+    return (
+      '<span class="' +
+      classes.tooltipWrap +
+      '">' +
+      '<button type="button" data-action="' +
+      escapeAttr(config.action) +
+      '" class="' +
+      buttonClass +
+      '" aria-label="' +
+      escapeAttr(config.label) +
+      '">' +
+      '<i class="' +
+      escapeAttr(config.iconClass) +
+      ' text-sm" aria-hidden="true"></i>' +
+      "</button>" +
+      '<span role="tooltip" class="' +
+      classes.tooltip +
+      '">' +
+      escapeHtml(config.label) +
+      "</span>" +
+      "</span>"
+    );
+  }
+
   function loadCurrentDirectory() {
     contentEl.innerHTML =
       '<div class="' + classes.loading + '" aria-live="polite">Loading…</div>';
@@ -265,20 +297,22 @@
             '">' +
             (isDir
               ? ""
-              : '<button type="button" data-action="open" class="' +
-                classes.fileActionButton +
-                '" aria-label="Open file"><i class="fa-solid fa-up-right-from-square text-sm" aria-hidden="true"></i></button>') +
-            '<button type="button" data-action="rename" class="' +
-            classes.fileActionButton +
-            '" aria-label="Rename"><i class="fa-solid fa-pen text-sm" aria-hidden="true"></i></button>' +
-            '<button type="button" data-action="move" class="' +
-            classes.fileActionButton +
-            '" aria-label="Move"><i class="fa-solid fa-arrows-up-down-left-right text-sm" aria-hidden="true"></i></button>' +
-            '<button type="button" data-action="delete" class="' +
-            classes.fileActionButton +
-            " " +
-            classes.deleteButton +
-            '" aria-label="Delete"><i class="fa-solid fa-trash text-sm" aria-hidden="true"></i></button>' +
+              : iconActionButtonMarkup({
+                  action: "open",
+                  label: "Open file",
+                  iconClass: "fa-solid fa-up-right-from-square",
+                })) +
+            iconActionButtonMarkup({
+              action: "rename",
+              label: "Rename",
+              iconClass: "fa-solid fa-pen",
+            }) +
+            iconActionButtonMarkup({
+              action: "delete",
+              label: "Delete",
+              iconClass: "fa-solid fa-trash",
+              extraClass: classes.deleteButton,
+            }) +
             "</div>";
           ul.appendChild(li);
         });
@@ -315,16 +349,6 @@
               .querySelector('[data-role="item-name"]')
               .getAttribute("data-path");
             openRenameDialog(path);
-          });
-        });
-        ul.querySelectorAll('[data-action="move"]').forEach(function (btn) {
-          btn.addEventListener("click", function (e) {
-            e.stopPropagation();
-            const path = e.target
-              .closest("li")
-              .querySelector('[data-role="item-name"]')
-              .getAttribute("data-path");
-            openMoveDialog(path);
           });
         });
         ul.querySelectorAll('[data-action="delete"]').forEach(function (btn) {
@@ -445,22 +469,18 @@
   function openActionDialog(options) {
     const dialogTitles = {
       rename: "Rename",
-      move: "Move to",
       newFolder: "New folder",
     };
     const fieldLabels = {
       rename: "New name",
-      move: "Directory path",
       newFolder: "Folder name",
     };
     const fieldPlaceholders = {
       rename: "",
-      move: ". or folder name",
       newFolder: "Folder name",
     };
     const primaryButtonLabels = {
       rename: "Rename",
-      move: "Move",
       newFolder: "Create",
     };
     const actionType = options.type;
@@ -502,14 +522,6 @@
     openActionDialog({ type: "rename", path: path, value: name });
   }
 
-  function openMoveDialog(path) {
-    openActionDialog({
-      type: "move",
-      path: path,
-      value: ROOT_PATH,
-    });
-  }
-
   function closeModal() {
     if (modalDialog.open) {
       modalDialog.close();
@@ -539,14 +551,6 @@
           loadCurrentDirectory();
         }).catch(function (err) {
           showError("Rename failed");
-        });
-      } else if (title === "Move to") {
-        const path = inputEl.dataset.path;
-        puter.fs.move(path, val).then(function () {
-          closeModal();
-          loadCurrentDirectory();
-        }).catch(function (err) {
-          showError("Move failed");
         });
       } else if (title === "New folder") {
         const fullPath =
