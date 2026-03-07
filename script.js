@@ -9,8 +9,6 @@
   const modalFooter = document.getElementById("modal-footer");
   const modalClose = document.getElementById("modal-close");
   const uploadInput = document.getElementById("upload-input");
-  const authPromptEl = document.getElementById("auth-prompt");
-  const signOutBtn = document.getElementById("btn-sign-out");
 
   function isAuthError(err) {
     if (!err) return false;
@@ -23,38 +21,17 @@
     );
   }
 
-  function setAuthState(signedIn) {
-    if (signedIn) {
-      authPromptEl.classList.add("hidden");
-      signOutBtn.style.display = "";
-      loadDir();
-    } else {
-      authPromptEl.classList.remove("hidden");
-      signOutBtn.style.display = "none";
-      contentEl.innerHTML = "";
-    }
-  }
-
-  function onSignInClick() {
-    puter.auth
-      .signIn()
-      .then(function () {
-        setAuthState(true);
-      })
-      .catch(function () {
-        showError("Sign in failed or was cancelled");
-      });
-  }
-
   function initAuth() {
     if (typeof puter === "undefined" || !puter.auth) {
       setTimeout(initAuth, 50);
       return;
     }
     if (puter.auth.isSignedIn()) {
-      setAuthState(true);
+      loadDir();
     } else {
-      setAuthState(false);
+      contentEl.innerHTML =
+        '<div class="empty-state">Sign in with Puter in another tab or window to use your cloud drive here.</div>';
+      renderBreadcrumb();
     }
   }
 
@@ -150,15 +127,17 @@
         items.forEach(function (item) {
           const li = document.createElement("li");
           const isDir = item.is_dir === true;
-          const icon = isDir ? "📁" : "📄";
+          const iconClass = isDir
+            ? "fa-solid fa-folder"
+            : "fa-solid fa-file";
           const name =
             item.name ||
             item.path.split("/").filter(Boolean).pop() ||
             item.path;
           li.innerHTML =
-            '<span class="icon" aria-hidden="true">' +
-            icon +
-            "</span>" +
+            '<span class="icon" aria-hidden="true"><i class="' +
+            iconClass +
+            '"></i></span>' +
             '<button type="button" class="name" data-path="' +
             escapeAttr(item.path) +
             '" data-isdir="' +
@@ -172,10 +151,12 @@
             formatDate(item.created) +
             "</span>" +
             '<div class="actions">' +
-            (isDir ? "" : '<button type="button" class="open">Open</button>') +
-            '<button type="button" class="rename">Rename</button>' +
-            '<button type="button" class="move">Move</button>' +
-            '<button type="button" class="delete">Delete</button>' +
+            (isDir
+              ? ""
+              : '<button type="button" class="open" aria-label="Open file"><i class="fa-solid fa-up-right-from-square" aria-hidden="true"></i></button>') +
+            '<button type="button" class="rename" aria-label="Rename"><i class="fa-solid fa-pen" aria-hidden="true"></i></button>' +
+            '<button type="button" class="move" aria-label="Move"><i class="fa-solid fa-arrows-up-down-left-right" aria-hidden="true"></i></button>' +
+            '<button type="button" class="delete" aria-label="Delete"><i class="fa-solid fa-trash" aria-hidden="true"></i></button>' +
             "</div>";
           ul.appendChild(li);
         });
@@ -193,18 +174,6 @@
               openFile(path);
             }
           });
-        });
-        ul.querySelectorAll("button.open").forEach(function (btn) {
-          btn.setAttribute("aria-label", "Open file");
-        });
-        ul.querySelectorAll("button.rename").forEach(function (btn) {
-          btn.setAttribute("aria-label", "Rename");
-        });
-        ul.querySelectorAll("button.move").forEach(function (btn) {
-          btn.setAttribute("aria-label", "Move");
-        });
-        ul.querySelectorAll("button.delete").forEach(function (btn) {
-          btn.setAttribute("aria-label", "Delete");
         });
         ul.querySelectorAll("button.open").forEach(function (btn) {
           btn.addEventListener("click", function (e) {
@@ -249,7 +218,8 @@
       })
       .catch(function (err) {
         if (isAuthError(err)) {
-          setAuthState(false);
+          contentEl.innerHTML =
+            '<div class="empty-state">Sign in with Puter to access this folder.</div>';
           showError("Please sign in to continue");
         } else {
           contentEl.innerHTML =
@@ -321,7 +291,7 @@
       escapeHtml(name) +
       "</strong>? This cannot be undone.</p>";
     modalFooter.innerHTML =
-      '<button type="button" class="btn" id="modal-cancel">Cancel</button><button type="button" class="btn btn-danger" id="modal-confirm-delete">Delete</button>';
+      '<button type="button" class="btn" id="modal-cancel"><i class="fa-solid fa-xmark" aria-hidden="true"></i><span>Cancel</span></button><button type="button" class="btn btn-danger" id="modal-confirm-delete"><i class="fa-solid fa-trash" aria-hidden="true"></i><span>Delete</span></button>';
     modalOverlay.classList.remove("hidden");
 
     document
@@ -386,16 +356,6 @@
   });
 
   document
-    .getElementById("btn-sign-in")
-    .addEventListener("click", onSignInClick);
-  document
-    .getElementById("btn-sign-out")
-    .addEventListener("click", function () {
-      puter.auth.signOut();
-      setAuthState(false);
-    });
-
-  document
     .getElementById("btn-new-folder")
     .addEventListener("click", function () {
       const name = prompt("Folder name:");
@@ -411,7 +371,8 @@
         })
         .catch(function (err) {
           if (isAuthError(err)) {
-            setAuthState(false);
+            contentEl.innerHTML =
+              '<div class="empty-state">Sign in with Puter to create folders.</div>';
             showError("Please sign in to continue");
           } else {
             showError("Could not create folder");
@@ -432,12 +393,13 @@
         loadDir();
       })
       .catch(function (err) {
-        if (isAuthError(err)) {
-          setAuthState(false);
-          showError("Please sign in to continue");
-        } else {
-          showError("Upload failed");
-        }
+if (isAuthError(err)) {
+            contentEl.innerHTML =
+              '<div class="empty-state">Sign in with Puter to upload files.</div>';
+            showError("Please sign in to continue");
+          } else {
+            showError("Upload failed");
+          }
         uploadInput.value = "";
       });
   });

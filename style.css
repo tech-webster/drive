@@ -160,6 +160,9 @@ body::before {
   font-size: 0.875rem;
   font-weight: 500;
   color: var(--color-text);
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
   transition:
     background var(--duration-fast) var(--ease-out),
     border-color var(--duration-fast) var(--ease-out),
@@ -221,31 +224,8 @@ body::before {
   display: none;
 }
 
-/* --------------------------------------------------------------------------
-   Auth prompt
-   -------------------------------------------------------------------------- */
-.auth-prompt {
-  padding: var(--space-6) var(--space-5);
-  background: var(--color-bg-elevated);
-  border-bottom: 1px solid var(--color-border);
-  animation: fadeIn 0.3s var(--ease-out) backwards;
-}
-
-.auth-prompt.hidden {
-  display: none;
-}
-
-.auth-prompt-box {
-  max-width: 420px;
-  margin: 0 auto;
-  text-align: center;
-}
-
-.auth-prompt-text {
-  margin: 0 0 var(--space-4);
-  color: var(--color-text-muted);
-  font-size: 0.9375rem;
-  line-height: 1.65;
+.btn .fa-solid {
+  font-size: 0.875em;
 }
 
 /* --------------------------------------------------------------------------
@@ -339,10 +319,20 @@ body::before {
 }
 
 .file-list .icon {
-  font-size: 1.5rem;
   width: 2.5rem;
-  text-align: center;
   flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-text-muted);
+}
+
+.file-list .icon .fa-solid {
+  font-size: 1.25rem;
+}
+
+.file-list .icon .fa-folder {
+  color: var(--color-primary);
 }
 
 .file-list .name {
@@ -388,19 +378,24 @@ body::before {
 
 .file-list .actions button {
   font-family: var(--font-sans);
-  padding: var(--space-1) var(--space-2);
-  font-size: 0.75rem;
+  padding: var(--space-2);
   border: none;
   background: transparent;
   color: var(--color-text-muted);
   cursor: pointer;
   border-radius: var(--radius-sm);
-  font-weight: 500;
   transition:
     background var(--duration-fast),
     color var(--duration-fast);
   -webkit-tap-highlight-color: transparent;
   touch-action: manipulation;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.file-list .actions button .fa-solid {
+  font-size: 0.875rem;
 }
 
 .file-list .actions button:hover {
@@ -550,15 +545,18 @@ body::before {
 .modal-close {
   background: none;
   border: none;
-  font-size: 1.5rem;
   cursor: pointer;
   color: var(--color-text-muted);
-  padding: var(--space-1) var(--space-2);
+  padding: var(--space-2);
   line-height: 1;
   border-radius: var(--radius-sm);
   flex-shrink: 0;
   -webkit-tap-highlight-color: transparent;
   transition: color var(--duration-fast), background var(--duration-fast);
+}
+
+.modal-close .fa-solid {
+  font-size: 1.25rem;
 }
 
 .modal-close:hover {

@@ -12,6 +12,12 @@
       href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap"
       rel="stylesheet"
     />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
@@ -20,32 +26,16 @@
         <h1 class="header__title">My Cloud Drive</h1>
         <div class="toolbar">
           <button type="button" class="btn btn-primary" id="btn-new-folder">
-            New folder
+            <i class="fa-solid fa-folder-plus" aria-hidden="true"></i>
+            <span>New folder</span>
           </button>
-          <button type="button" class="btn" id="btn-upload">Upload file</button>
-          <button
-            type="button"
-            class="btn"
-            id="btn-sign-out"
-            style="display: none"
-          >
-            Sign out
+          <button type="button" class="btn" id="btn-upload">
+            <i class="fa-solid fa-file-arrow-up" aria-hidden="true"></i>
+            <span>Upload file</span>
           </button>
           <input type="file" id="upload-input" multiple />
         </div>
       </header>
-
-      <div id="auth-prompt" class="auth-prompt hidden">
-        <div class="auth-prompt-box">
-          <p class="auth-prompt-text">
-            Sign in with Puter to use your cloud drive. You'll be able to create
-            folders, upload files, and manage them here.
-          </p>
-          <button type="button" class="btn btn-primary" id="btn-sign-in">
-            Sign in with Puter
-          </button>
-        </div>
-      </div>
 
       <nav class="breadcrumb" id="breadcrumb" aria-label="Current path">
         <a href="#" data-path=".">Home</a>
@@ -68,7 +58,7 @@
             id="modal-close"
             aria-label="Close"
           >
-            <span aria-hidden="true">&times;</span>
+            <i class="fa-solid fa-xmark" aria-hidden="true"></i>
           </button>
         </div>
         <div class="modal-body" id="modal-body"></div>
