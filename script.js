@@ -12,8 +12,13 @@
   const searchForm = document.getElementById("search-form");
   const searchInput = document.getElementById("search-input");
   const searchClear = document.getElementById("search-clear");
+  const viewListButton = document.getElementById("btn-view-list");
+  const viewCardsButton = document.getElementById("btn-view-cards");
   let currentDirectoryItems = [];
   let currentSearchQuery = "";
+  let currentViewMode = localStorage.getItem("tw-drive:view-mode") === "cards"
+    ? "cards"
+    : "list";
   const classes = {
     breadcrumbLink:
       "rounded-[6px] px-2 py-1 text-drive-accent no-underline transition-colors duration-150 hover:bg-drive-accent/15 hover:text-drive-accent-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-drive-accent motion-reduce:transition-none",
@@ -36,12 +41,32 @@
       "m-0 flex-1 rounded-[6px] border-0 bg-transparent px-0 py-1 text-left font-medium text-inherit outline-none transition-colors duration-150 hover:text-drive-accent focus-visible:ring-2 focus-visible:ring-drive-accent motion-reduce:transition-none",
     fileMeta: "shrink-0 text-xs text-drive-muted max-[600px]:hidden",
     fileActions: "flex shrink-0 items-center gap-1",
-    tooltipWrap: "group relative inline-flex",
+    fileGrid: "grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4",
+    fileCard:
+      "relative flex min-h-[160px] flex-col overflow-hidden rounded-[14px] border border-drive-border bg-[#08142f] shadow-[0_10px_28px_rgba(0,0,0,0.22)] transition-transform duration-200 hover:-translate-y-0.5 hover:border-drive-accent/40 hover:shadow-[0_14px_32px_rgba(0,0,0,0.28)] motion-reduce:transition-none",
+    fileCardHeader: "flex flex-1 items-start justify-between gap-3 px-5 pt-5 pb-4",
+    fileCardIconWrap:
+      "flex h-16 w-16 items-center justify-center rounded-[16px] bg-[#091a3b] shadow-[inset_0_1px_0_rgba(255,255,255,0.04)]",
+    fileCardTitle:
+      "truncate text-left text-[0.92rem] font-medium tracking-[-0.02em] text-drive-text",
+    fileCardSubtitle: "mt-1 text-[0.72rem] font-medium uppercase tracking-[0.18em] text-drive-faint",
+    fileCardMeta: "text-[0.72rem] text-drive-muted",
+    fileCardFooter:
+      "flex items-center justify-between gap-3 border-t border-white/6 bg-white/[0.03] px-4 py-3",
+    fileCardActionGroup: "flex items-center gap-0.5",
+    fileCardInfo: "min-w-0 flex-1",
+    fileCardIconBase: "text-[2rem]",
+    viewToggleButton:
+      "inline-flex h-10 items-center gap-2 rounded-[8px] px-3 text-sm font-medium transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-drive-accent",
+    viewToggleButtonIdle: "text-drive-muted hover:bg-drive-surface-hover hover:text-drive-text",
+    viewToggleButtonActive:
+      "bg-drive-panel text-drive-text shadow-[inset_0_1px_0_rgba(255,255,255,0.05),0_10px_18px_rgba(0,0,0,0.22)]",
+    tooltipWrap: "group/tooltip relative inline-flex",
     fileActionButton:
       "inline-flex cursor-pointer items-center justify-center rounded-[6px] border-0 bg-transparent p-2 text-drive-muted transition-colors duration-150 hover:bg-drive-surface-hover hover:text-drive-text focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-drive-accent motion-reduce:transition-none",
     deleteButton: "hover:bg-drive-danger/12 hover:text-drive-danger",
     tooltip:
-      "pointer-events-none absolute right-0 bottom-full z-30 mb-2 hidden whitespace-nowrap rounded-[6px] border border-drive-border bg-drive-panel px-2 py-1 text-xs font-medium text-drive-text shadow-[0_8px_24px_rgba(0,0,0,0.35)] group-hover:block group-focus-within:block",
+      "pointer-events-none absolute right-0 bottom-full z-30 mb-2 hidden whitespace-nowrap rounded-[6px] border border-drive-border bg-drive-panel px-2 py-1 text-xs font-medium text-drive-text shadow-[0_8px_24px_rgba(0,0,0,0.35)] group-hover/tooltip:block group-focus-within/tooltip:block",
     previewImage: "block max-h-[70vh] max-w-full rounded-[6px]",
     previewText:
       "max-h-[60vh] overflow-auto whitespace-pre-wrap break-words text-sm leading-[1.6] text-drive-text",
@@ -308,6 +333,81 @@
     return classes.buttonBase + " " + classes.buttonNeutral;
   }
 
+  function getItemDisplayName(item) {
+    return item.name || item.path.split("/").filter(Boolean).pop() || item.path;
+  }
+
+  function getItemTypeMeta(item) {
+    if (item.is_dir === true) {
+      return {
+        iconClass: "fa-solid fa-folder",
+        accentClass: "text-drive-accent",
+        label: "Folder",
+      };
+    }
+
+    const name = getItemDisplayName(item).toLowerCase();
+    if (/\.pdf$/i.test(name)) {
+      return {
+        iconClass: "fa-regular fa-file-pdf",
+        accentClass: "text-[#ff5a67]",
+        label: "PDF",
+      };
+    }
+    if (/\.(png|jpe?g|gif|webp|bmp|svg)$/i.test(name)) {
+      return {
+        iconClass: "fa-regular fa-file-image",
+        accentClass: "text-[#4f8cff]",
+        label: "Image",
+      };
+    }
+    if (/\.(xlsx|xls|csv)$/i.test(name)) {
+      return {
+        iconClass: "fa-regular fa-file-excel",
+        accentClass: "text-[#22c55e]",
+        label: "Sheet",
+      };
+    }
+    if (/\.(doc|docx|txt|md|rtf)$/i.test(name)) {
+      return {
+        iconClass: "fa-regular fa-file-lines",
+        accentClass: "text-[#ff8a1e]",
+        label: "Doc",
+      };
+    }
+
+    return {
+      iconClass: "fa-regular fa-file",
+      accentClass: "text-drive-muted",
+      label: "File",
+    };
+  }
+
+  function setViewMode(mode) {
+    currentViewMode = mode === "cards" ? "cards" : "list";
+    localStorage.setItem("tw-drive:view-mode", currentViewMode);
+    viewListButton.className =
+      classes.viewToggleButton +
+      " " +
+      (currentViewMode === "list"
+        ? classes.viewToggleButtonActive
+        : classes.viewToggleButtonIdle);
+    viewCardsButton.className =
+      classes.viewToggleButton +
+      " " +
+      (currentViewMode === "cards"
+        ? classes.viewToggleButtonActive
+        : classes.viewToggleButtonIdle);
+    viewListButton.setAttribute(
+      "aria-pressed",
+      currentViewMode === "list" ? "true" : "false",
+    );
+    viewCardsButton.setAttribute(
+      "aria-pressed",
+      currentViewMode === "cards" ? "true" : "false",
+    );
+  }
+
   function emptyStateMarkup(message, detail) {
     return (
       '<div class="' +
@@ -334,11 +434,7 @@
   function getFilteredDirectoryItems() {
     if (!currentSearchQuery) return currentDirectoryItems;
     return currentDirectoryItems.filter(function (item) {
-      const name =
-        item.name ||
-        item.path.split("/").filter(Boolean).pop() ||
-        item.path ||
-        "";
+      const name = getItemDisplayName(item) || "";
       return name.toLowerCase().includes(currentSearchQuery);
     });
   }
@@ -368,6 +464,188 @@
       "</span>" +
       "</span>"
     );
+  }
+
+  function bindDirectoryInteractions(container) {
+    container.querySelectorAll('[data-role="item-name"]').forEach(function (el) {
+      el.addEventListener("click", function () {
+        const path = this.getAttribute("data-path");
+        const isDir = this.getAttribute("data-isdir") === "1";
+        if (isDir) {
+          currentDirectoryPath = path.replace(/\/$/, "") || ROOT_PATH;
+          loadCurrentDirectory();
+        } else {
+          openFilePreview(path);
+        }
+      });
+    });
+    container.querySelectorAll('[data-action="open"]').forEach(function (btn) {
+      btn.addEventListener("click", function (e) {
+        e.stopPropagation();
+        const path = e.target
+          .closest("[data-entry]")
+          .querySelector('[data-role="item-name"]')
+          .getAttribute("data-path");
+        openFilePreview(path);
+      });
+    });
+    container.querySelectorAll('[data-action="rename"]').forEach(function (btn) {
+      btn.addEventListener("click", function (e) {
+        e.stopPropagation();
+        const path = e.target
+          .closest("[data-entry]")
+          .querySelector('[data-role="item-name"]')
+          .getAttribute("data-path");
+        openRenameDialog(path);
+      });
+    });
+    container.querySelectorAll('[data-action="delete"]').forEach(function (btn) {
+      btn.addEventListener("click", function (e) {
+        e.stopPropagation();
+        const path = e.target
+          .closest("[data-entry]")
+          .querySelector('[data-role="item-name"]')
+          .getAttribute("data-path");
+        openDeleteDialog(path);
+      });
+    });
+  }
+
+  function buildListView(items) {
+    const ul = document.createElement("ul");
+    ul.className = classes.fileList;
+    items.forEach(function (item) {
+      const li = document.createElement("li");
+      li.className = classes.fileItem;
+      li.setAttribute("data-entry", "");
+      const isDir = item.is_dir === true;
+      const iconClass = isDir ? "fa-solid fa-folder" : "fa-solid fa-file";
+      const name = getItemDisplayName(item);
+      li.innerHTML =
+        '<span class="' +
+        classes.fileIcon +
+        '" aria-hidden="true"><i class="' +
+        iconClass +
+        " " +
+        (isDir ? classes.folderIcon : classes.fileIconGlyph) +
+        '"></i></span>' +
+        '<button type="button" data-role="item-name" class="' +
+        classes.fileName +
+        '" data-path="' +
+        escapeAttr(item.path) +
+        '" data-isdir="' +
+        (isDir ? "1" : "0") +
+        '">' +
+        escapeHtml(name) +
+        "</button>" +
+        '<span class="' +
+        classes.fileMeta +
+        '">' +
+        (item.size !== undefined ? formatSize(item.size) : "—") +
+        " · " +
+        formatDate(item.created) +
+        "</span>" +
+        '<div class="' +
+        classes.fileActions +
+        '">' +
+        (isDir
+          ? ""
+          : iconActionButtonMarkup({
+              action: "open",
+              label: "Open file",
+              iconClass: "fa-solid fa-up-right-from-square",
+            })) +
+        iconActionButtonMarkup({
+          action: "rename",
+          label: "Rename",
+          iconClass: "fa-solid fa-pen",
+        }) +
+        iconActionButtonMarkup({
+          action: "delete",
+          label: "Delete",
+          iconClass: "fa-solid fa-trash",
+          extraClass: classes.deleteButton,
+        }) +
+        "</div>";
+      ul.appendChild(li);
+    });
+    return ul;
+  }
+
+  function buildCardView(items) {
+    const grid = document.createElement("div");
+    grid.className = classes.fileGrid;
+    items.forEach(function (item) {
+      const card = document.createElement("article");
+      card.className = classes.fileCard;
+      card.setAttribute("data-entry", "");
+      const name = getItemDisplayName(item);
+      const isDir = item.is_dir === true;
+      const typeMeta = getItemTypeMeta(item);
+      card.innerHTML =
+        '<div class="' +
+        classes.fileCardHeader +
+        '">' +
+        '<div class="' +
+        classes.fileCardIconWrap +
+        '"><i class="' +
+        typeMeta.iconClass +
+        " " +
+        classes.fileCardIconBase +
+        " " +
+        typeMeta.accentClass +
+        '" aria-hidden="true"></i></div>' +
+        '<div class="' +
+        classes.fileCardMeta +
+        '">' +
+        escapeHtml(isDir ? "Folder" : formatDate(item.created)) +
+        "</div>" +
+        "</div>" +
+        '<div class="' +
+        classes.fileCardFooter +
+        '">' +
+        '<div class="' +
+        classes.fileCardInfo +
+        '">' +
+        '<button type="button" data-role="item-name" class="' +
+        classes.fileCardTitle +
+        '" data-path="' +
+        escapeAttr(item.path) +
+        '" data-isdir="' +
+        (isDir ? "1" : "0") +
+        '">' +
+        escapeHtml(name) +
+        '</button><div class="' +
+        classes.fileCardSubtitle +
+        '">' +
+        escapeHtml(isDir ? "Directory" : typeMeta.label) +
+        "</div>" +
+        "</div>" +
+        '<div class="' +
+        classes.fileCardActionGroup +
+        '">' +
+        (isDir
+          ? ""
+          : iconActionButtonMarkup({
+              action: "open",
+              label: "Open file",
+              iconClass: "fa-solid fa-up-right-from-square",
+            })) +
+        iconActionButtonMarkup({
+          action: "rename",
+          label: "Rename",
+          iconClass: "fa-solid fa-pen",
+        }) +
+        iconActionButtonMarkup({
+          action: "delete",
+          label: "Delete",
+          iconClass: "fa-solid fa-trash",
+          extraClass: classes.deleteButton,
+        }) +
+        "</div>";
+      grid.appendChild(card);
+    });
+    return grid;
   }
 
   function loadCurrentDirectory() {
@@ -415,112 +693,12 @@
       return;
     }
 
-        const ul = document.createElement("ul");
-        ul.className = classes.fileList;
-        items.forEach(function (item) {
-          const li = document.createElement("li");
-          li.className = classes.fileItem;
-          const isDir = item.is_dir === true;
-          const iconClass = isDir
-            ? "fa-solid fa-folder"
-            : "fa-solid fa-file";
-          const name =
-            item.name ||
-            item.path.split("/").filter(Boolean).pop() ||
-            item.path;
-          li.innerHTML =
-            '<span class="' +
-            classes.fileIcon +
-            '" aria-hidden="true"><i class="' +
-            iconClass +
-            " " +
-            (isDir ? classes.folderIcon : classes.fileIconGlyph) +
-            '"></i></span>' +
-            '<button type="button" data-role="item-name" class="' +
-            classes.fileName +
-            '" data-path="' +
-            escapeAttr(item.path) +
-            '" data-isdir="' +
-            (isDir ? "1" : "0") +
-            '">' +
-            escapeHtml(name) +
-            "</button>" +
-            '<span class="' +
-            classes.fileMeta +
-            '">' +
-            (item.size !== undefined ? formatSize(item.size) : "—") +
-            " · " +
-            formatDate(item.created) +
-            "</span>" +
-            '<div class="' +
-            classes.fileActions +
-            '">' +
-            (isDir
-              ? ""
-              : iconActionButtonMarkup({
-                  action: "open",
-                  label: "Open file",
-                  iconClass: "fa-solid fa-up-right-from-square",
-                })) +
-            iconActionButtonMarkup({
-              action: "rename",
-              label: "Rename",
-              iconClass: "fa-solid fa-pen",
-            }) +
-            iconActionButtonMarkup({
-              action: "delete",
-              label: "Delete",
-              iconClass: "fa-solid fa-trash",
-              extraClass: classes.deleteButton,
-            }) +
-            "</div>";
-          ul.appendChild(li);
-        });
-        contentEl.innerHTML = "";
-        contentEl.appendChild(ul);
-
-        ul.querySelectorAll('[data-role="item-name"]').forEach(function (el) {
-          el.addEventListener("click", function () {
-            const path = this.getAttribute("data-path");
-            const isDir = this.getAttribute("data-isdir") === "1";
-            if (isDir) {
-              currentDirectoryPath = path.replace(/\/$/, "") || ROOT_PATH;
-              loadCurrentDirectory();
-            } else {
-              openFilePreview(path);
-            }
-          });
-        });
-        ul.querySelectorAll('[data-action="open"]').forEach(function (btn) {
-          btn.addEventListener("click", function (e) {
-            e.stopPropagation();
-            const path = e.target
-              .closest("li")
-              .querySelector('[data-role="item-name"]')
-              .getAttribute("data-path");
-            openFilePreview(path);
-          });
-        });
-        ul.querySelectorAll('[data-action="rename"]').forEach(function (btn) {
-          btn.addEventListener("click", function (e) {
-            e.stopPropagation();
-            const path = e.target
-              .closest("li")
-              .querySelector('[data-role="item-name"]')
-              .getAttribute("data-path");
-            openRenameDialog(path);
-          });
-        });
-        ul.querySelectorAll('[data-action="delete"]').forEach(function (btn) {
-          btn.addEventListener("click", function (e) {
-            e.stopPropagation();
-            const path = e.target
-              .closest("li")
-              .querySelector('[data-role="item-name"]')
-              .getAttribute("data-path");
-            openDeleteDialog(path);
-          });
-        });
+    const view = currentViewMode === "cards"
+      ? buildCardView(items)
+      : buildListView(items);
+    contentEl.innerHTML = "";
+    contentEl.appendChild(view);
+    bindDirectoryInteractions(view);
   }
 
   function openFilePreview(path) {
@@ -789,6 +967,14 @@
   searchForm.addEventListener("submit", function (e) {
     e.preventDefault();
   });
+  viewListButton.addEventListener("click", function () {
+    setViewMode("list");
+    renderDirectoryItems();
+  });
+  viewCardsButton.addEventListener("click", function () {
+    setViewMode("cards");
+    renderDirectoryItems();
+  });
   uploadInput.addEventListener("change", function () {
     if (!uploadInput.files || uploadInput.files.length === 0) return;
     const targetDirectoryPath =
@@ -813,5 +999,6 @@
       });
   });
 
+  setViewMode(currentViewMode);
   initializeTwDrive();
 })();

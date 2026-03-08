@@ -3,162 +3,862 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="theme-color" content="#ff7f02" />
+    <meta
+      name="description"
+      content="TW Drive by TechWebster is a secure file storage and private folder access landing page built for privacy-first document sharing, protected team files, and controlled business access."
+    />
+    <meta
+      name="keywords"
+      content="TW Drive, TechWebster Drive, secure file storage, private folder access, secure document sharing, team file portal, privacy first cloud storage, protected business files"
+    />
+    <meta name="author" content="TechWebster" />
+    <meta name="robots" content="index, follow" />
+    <meta
+      name="googlebot"
+      content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
+    />
+    <meta name="theme-color" content="#FF7F00" />
     <meta name="color-scheme" content="dark" />
-    <title>TW Drive</title>
+    <link rel="canonical" href="https://drive.techwebster.com/" />
+    <link rel="icon" href="https://www.techwebster.com/favicon.ico" sizes="any" />
+    <link rel="apple-touch-icon" href="https://www.techwebster.com/favicon.ico" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="TechWebster" />
+    <meta property="og:locale" content="en_US" />
+    <meta
+      property="og:title"
+      content="TW Drive | Secure File Storage & Private Folder Access"
+    />
+    <meta
+      property="og:description"
+      content="A privacy-first TechWebster drive experience for secure document sharing, protected folders, and direct access to business files."
+    />
+    <meta property="og:url" content="https://drive.techwebster.com/" />
+    <meta
+      property="og:image"
+      content="https://www.techwebster.com/opengraph-image"
+    />
+    <meta
+      property="og:image:alt"
+      content="TW Drive by TechWebster secure file storage landing page"
+    />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta
+      name="twitter:title"
+      content="TW Drive | Secure File Storage & Private Folder Access"
+    />
+    <meta
+      name="twitter:description"
+      content="Privacy-first file access, protected folders, and secure document sharing for teams using TW Drive."
+    />
+    <meta
+      name="twitter:image"
+      content="https://www.techwebster.com/opengraph-image"
+    />
+    <title>TW Drive | Secure File Storage & Private Folder Access</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=Newsreader:opsz,wght@6..72,500;6..72,700&display=swap"
       rel="stylesheet"
     />
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
-      crossorigin="anonymous"
-      referrerpolicy="no-referrer"
-    />
-    <link rel="stylesheet" href="style.css" />
-  </head>
-  <body
-    class="min-h-screen bg-drive-bg font-sans text-drive-text antialiased [line-height:1.55]"
-  >
-    <div
-      aria-hidden="true"
-      class="pointer-events-none fixed inset-0 z-0 bg-[radial-gradient(ellipse_120%_80%_at_50%_-20%,rgba(228,168,83,0.06)_0%,transparent_50%),radial-gradient(ellipse_80%_50%_at_100%_50%,rgba(30,35,50,0.4)_0%,transparent_50%)]"
-    ></div>
-    <div class="relative z-[1] min-h-screen">
-      <header
-        class="relative flex flex-wrap items-center justify-between gap-4 border-b border-drive-border bg-drive-panel px-4 py-4 sm:px-6"
-      >
-        <div
-          aria-hidden="true"
-          class="pointer-events-none absolute right-0 bottom-0 left-0 h-px opacity-50 bg-[linear-gradient(90deg,transparent,rgba(255,127,2,0.2),transparent)]"
-        ></div>
-        <h1
-          class="m-0 flex items-center gap-2 text-[1.625rem] font-medium tracking-[-0.03em] text-drive-text [text-wrap:balance] max-[600px]:text-[1.375rem]"
-        >
-          <img
-            src="https://www.techwebster.com/icon.svg"
-            alt="TW"
-            class="block h-8 w-8 shrink-0 object-contain"
-            width="32"
-            height="32"
-          />
-          <span>TW Drive</span>
-        </h1>
-        <form
-          id="search-form"
-          class="relative flex min-w-[240px] flex-1 items-center self-stretch sm:max-w-md"
-          role="search"
-        >
-          <i
-            class="fa-solid fa-magnifying-glass pointer-events-none absolute left-3 text-xs text-drive-muted"
-            aria-hidden="true"
-          ></i>
-          <input
-            id="search-input"
-            type="search"
-            class="h-11 w-full rounded-[10px] border border-drive-border-strong bg-drive-surface py-2 pr-11 pl-9 text-sm text-drive-text outline-none placeholder:text-drive-faint focus:border-drive-accent focus:ring-2 focus:ring-drive-accent/15"
-            placeholder="Search this folder"
-            autocomplete="off"
-            spellcheck="false"
-            aria-label="Search files and folders in the current folder"
-          />
-          <button
-            type="button"
-            id="search-clear"
-            class="absolute right-2 inline-flex h-7 w-7 items-center justify-center rounded-[6px] border-0 bg-transparent text-drive-muted transition-colors duration-150 hover:bg-drive-surface-hover hover:text-drive-text focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-drive-accent motion-reduce:transition-none"
-            aria-label="Clear search"
-            hidden
-          >
-            <i class="fa-solid fa-xmark text-sm" aria-hidden="true"></i>
-          </button>
-        </form>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "SoftwareApplication",
+        "name": "TW Drive",
+        "applicationCategory": "BusinessApplication",
+        "operatingSystem": "Web",
+        "url": "https://drive.techwebster.com/",
+        "creator": {
+          "@type": "Organization",
+          "name": "TechWebster",
+          "url": "https://www.techwebster.com/"
+        },
+        "description": "TW Drive is a privacy-first file storage and private folder access experience for secure document sharing and protected team files."
+      }
+    </script>
+    <style>
+      :root {
+        --bg: #0c0c0c;
+        --bg-soft: rgba(255, 255, 255, 0.04);
+        --panel: rgba(16, 16, 16, 0.82);
+        --panel-strong: rgba(22, 22, 22, 0.94);
+        --line: rgba(246, 235, 214, 0.14);
+        --line-strong: rgba(246, 235, 214, 0.22);
+        --text: #fff7ea;
+        --muted: #c4b8a0;
+        --accent: #ff7f00;
+        --accent-strong: #ff9833;
+        --success: #ffb15a;
+        --shadow: 0 30px 80px rgba(0, 0, 0, 0.34);
+        --max-width: 1180px;
+      }
 
-        <div class="flex items-center gap-2">
-          <button
-            type="button"
-            class="inline-flex items-center gap-2 rounded-[10px] border border-drive-accent bg-drive-accent px-4 py-2 text-sm font-medium text-drive-bg touch-manipulation transition-colors duration-150 hover:border-drive-accent-hover hover:bg-drive-accent-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-drive-accent motion-reduce:transition-none"
-            id="btn-new-folder"
-          >
-            <i class="fa-solid fa-folder-plus" aria-hidden="true"></i>
-            <span>New folder</span>
-          </button>
-          <button
-            type="button"
-            class="inline-flex items-center gap-2 rounded-[10px] border border-drive-border-strong bg-drive-surface px-4 py-2 text-sm font-medium text-drive-text touch-manipulation transition-colors duration-150 hover:border-drive-muted hover:bg-drive-surface-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-drive-accent motion-reduce:transition-none"
-            id="btn-upload"
-          >
-            <i class="fa-solid fa-file-arrow-up" aria-hidden="true"></i>
-            <span>Upload file</span>
-          </button>
-          <input
-            type="file"
-            id="upload-input"
-            class="hidden"
-            multiple
-            aria-label="Upload files to TW Drive"
-          />
+      * {
+        box-sizing: border-box;
+      }
+
+      html {
+        scroll-behavior: smooth;
+      }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        background:
+          radial-gradient(circle at top left, rgba(255, 127, 0, 0.22), transparent 28%),
+          radial-gradient(circle at 85% 15%, rgba(255, 152, 51, 0.12), transparent 22%),
+          linear-gradient(180deg, #121212 0%, #090909 100%);
+        color: var(--text);
+        font-family: "IBM Plex Sans", sans-serif;
+      }
+
+      body::before {
+        content: "";
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        background-image:
+          linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+        background-size: 72px 72px;
+        mask-image: radial-gradient(circle at center, black 35%, transparent 85%);
+        opacity: 0.26;
+      }
+
+      a {
+        color: inherit;
+      }
+
+      img {
+        display: block;
+        max-width: 100%;
+      }
+
+      code {
+        padding: 0.14rem 0.42rem;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(246, 235, 214, 0.1);
+        font-family: inherit;
+        font-size: 0.92em;
+      }
+
+      .page-shell {
+        position: relative;
+        overflow: hidden;
+      }
+
+      .page-shell::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        background:
+          linear-gradient(130deg, transparent 0 72%, rgba(255, 127, 0, 0.08) 72% 74%, transparent 74% 100%),
+          radial-gradient(circle at center, transparent 0 58%, rgba(255, 255, 255, 0.018) 58% 59%, transparent 59% 100%);
+        opacity: 0.65;
+      }
+
+      .wrap {
+        width: min(calc(100% - 2rem), var(--max-width));
+        margin: 0 auto;
+      }
+
+      .site-header {
+        position: sticky;
+        top: 0;
+        z-index: 10;
+        backdrop-filter: blur(14px);
+        background: rgba(11, 12, 12, 0.66);
+        border-bottom: 1px solid rgba(246, 235, 214, 0.08);
+      }
+
+      .site-header .wrap {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+        padding: 1rem 0;
+      }
+
+      .brand {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.85rem;
+        text-decoration: none;
+      }
+
+      .brand-mark {
+        width: 2.8rem;
+        height: 2.8rem;
+        border-radius: 0.95rem;
+        display: grid;
+        place-items: center;
+        background:
+          linear-gradient(145deg, rgba(255, 127, 0, 0.32), rgba(255, 255, 255, 0.05)),
+          rgba(255, 255, 255, 0.03);
+        border: 1px solid rgba(255, 127, 0, 0.4);
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1);
+      }
+
+      .brand-mark img {
+        width: 1.55rem;
+        height: 1.55rem;
+      }
+
+      .brand-copy strong,
+      .brand-copy span {
+        display: block;
+      }
+
+      .brand-copy strong {
+        font-size: 0.98rem;
+        letter-spacing: 0.02em;
+      }
+
+      .brand-copy span {
+        margin-top: 0.14rem;
+        font-size: 0.78rem;
+        color: var(--muted);
+      }
+
+      .header-actions {
+        display: flex;
+        align-items: center;
+        gap: 0.85rem;
+      }
+
+      .micro-link {
+        color: var(--muted);
+        text-decoration: none;
+        font-size: 0.92rem;
+      }
+
+      .hero {
+        padding: 5.75rem 0 4rem;
+      }
+
+      .hero-grid {
+        display: grid;
+        grid-template-columns: minmax(0, 1.1fr) minmax(320px, 0.9fr);
+        gap: 2rem;
+        align-items: center;
+      }
+
+      .eyebrow {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.6rem;
+        margin-bottom: 1.25rem;
+        padding: 0.5rem 0.85rem;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.045);
+        border: 1px solid rgba(246, 235, 214, 0.12);
+        color: var(--muted);
+        font-size: 0.82rem;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+
+      .eyebrow::before {
+        content: "";
+        width: 0.58rem;
+        height: 0.58rem;
+        border-radius: 50%;
+        background: var(--success);
+        box-shadow: 0 0 0 0.32rem rgba(137, 180, 154, 0.12);
+      }
+
+      h1 {
+        margin: 0;
+        max-width: 12ch;
+        font-family: "Newsreader", serif;
+        font-size: clamp(3.2rem, 8vw, 6.3rem);
+        line-height: 0.95;
+        letter-spacing: -0.045em;
+      }
+
+      .hero-copy p {
+        max-width: 44rem;
+        margin: 1.4rem 0 0;
+        color: var(--muted);
+        font-size: clamp(1.04rem, 1.7vw, 1.2rem);
+        line-height: 1.75;
+      }
+
+      .hero-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1rem;
+        margin-top: 2rem;
+      }
+
+      .button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.65rem;
+        min-height: 3.5rem;
+        padding: 0.95rem 1.25rem;
+        border-radius: 999px;
+        border: 1px solid transparent;
+        text-decoration: none;
+        font-weight: 600;
+        transition:
+          transform 180ms ease,
+          border-color 180ms ease,
+          background-color 180ms ease,
+          color 180ms ease;
+      }
+
+      .button:hover {
+        transform: translateY(-1px);
+      }
+
+      .button:focus-visible,
+      .micro-link:focus-visible {
+        outline: 2px solid var(--accent-strong);
+        outline-offset: 4px;
+      }
+
+      .button-primary {
+        background: var(--accent);
+        color: #151311;
+        box-shadow: 0 12px 30px rgba(201, 160, 99, 0.25);
+      }
+
+      .button-primary:hover {
+        background: var(--accent-strong);
+      }
+
+      .button-secondary {
+        border-color: var(--line-strong);
+        background: rgba(255, 255, 255, 0.02);
+        color: var(--text);
+      }
+
+      .hero-note {
+        margin-top: 1rem;
+        color: var(--muted);
+        font-size: 0.92rem;
+      }
+
+      .hero-card {
+        position: relative;
+        padding: 1.2rem;
+        border-radius: 2rem;
+        background:
+          linear-gradient(180deg, rgba(255, 255, 255, 0.055), rgba(255, 255, 255, 0.02)),
+          var(--panel);
+        border: 1px solid rgba(246, 235, 214, 0.12);
+        box-shadow: var(--shadow);
+      }
+
+      .hero-card::before {
+        content: "";
+        position: absolute;
+        inset: 1rem;
+        border-radius: 1.3rem;
+        border: 1px solid rgba(255, 127, 0, 0.16);
+        pointer-events: none;
+      }
+
+      .card-topline {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+        padding: 0.45rem 0.55rem 1rem;
+      }
+
+      .card-label {
+        font-size: 0.82rem;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--muted);
+      }
+
+      .status-pill {
+        padding: 0.38rem 0.7rem;
+        border-radius: 999px;
+        background: rgba(137, 180, 154, 0.12);
+        color: #cee5d5;
+        font-size: 0.82rem;
+      }
+
+      .stack {
+        display: grid;
+        gap: 0.9rem;
+      }
+
+      .stack-card,
+      .feature-card,
+      .route-card {
+        border-radius: 1.45rem;
+        background: var(--panel-strong);
+        border: 1px solid rgba(246, 235, 214, 0.1);
+      }
+
+      .stack-card {
+        padding: 1rem;
+      }
+
+      .stack-card strong {
+        display: block;
+        font-size: 1rem;
+      }
+
+      .stack-card p {
+        margin: 0.55rem 0 0;
+        color: var(--muted);
+        font-size: 0.94rem;
+        line-height: 1.65;
+      }
+
+      .stack-meta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.55rem;
+        margin-top: 0.85rem;
+      }
+
+      .stack-meta span {
+        padding: 0.4rem 0.62rem;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.04);
+        color: var(--muted);
+        font-size: 0.78rem;
+      }
+
+      .section {
+        padding: 1.4rem 0 4rem;
+      }
+
+      .section-head {
+        display: grid;
+        gap: 0.75rem;
+        margin-bottom: 1.6rem;
+      }
+
+      .section-kicker {
+        color: var(--accent);
+        letter-spacing: 0.08em;
+        font-size: 0.82rem;
+        text-transform: uppercase;
+      }
+
+      h2 {
+        margin: 0;
+        font-family: "Newsreader", serif;
+        font-size: clamp(2rem, 4vw, 3.5rem);
+        line-height: 1;
+        letter-spacing: -0.04em;
+      }
+
+      .section-head p {
+        max-width: 44rem;
+        margin: 0;
+        color: var(--muted);
+        line-height: 1.72;
+      }
+
+      .feature-grid,
+      .route-grid,
+      .signal-grid {
+        display: grid;
+        gap: 1rem;
+      }
+
+      .signal-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        margin-top: 1.35rem;
+      }
+
+      .signal {
+        padding: 1rem 1.1rem;
+        border-top: 1px solid rgba(246, 235, 214, 0.1);
+        color: var(--muted);
+      }
+
+      .signal strong {
+        display: block;
+        margin-bottom: 0.38rem;
+        color: var(--text);
+        font-size: 1rem;
+      }
+
+      .feature-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+
+      .feature-card {
+        padding: 1.4rem;
+      }
+
+      .feature-card span {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 2.35rem;
+        height: 2.35rem;
+        border-radius: 0.8rem;
+        background: rgba(255, 127, 0, 0.12);
+        border: 1px solid rgba(255, 127, 0, 0.18);
+        color: var(--accent-strong);
+        font-size: 0.92rem;
+        font-weight: 700;
+      }
+
+      .feature-card h3,
+      .route-card h3 {
+        margin: 1rem 0 0;
+        font-size: 1.1rem;
+      }
+
+      .feature-card p,
+      .route-card p {
+        margin: 0.75rem 0 0;
+        color: var(--muted);
+        line-height: 1.68;
+      }
+
+      .route-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .route-card {
+        padding: 1.5rem;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .route-card::after {
+        content: "";
+        position: absolute;
+        right: -2rem;
+        bottom: -2rem;
+        width: 8rem;
+        height: 8rem;
+        border-radius: 50%;
+        background: radial-gradient(circle, rgba(255, 127, 0, 0.18), transparent 70%);
+      }
+
+      .route-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.55rem;
+        padding: 0.4rem 0.72rem;
+        border-radius: 999px;
+        border: 1px solid rgba(246, 235, 214, 0.1);
+        font-size: 0.8rem;
+        color: var(--muted);
+      }
+
+      .route-card .button {
+        margin-top: 1.15rem;
+      }
+
+      .site-footer {
+        padding: 1rem 0 2rem;
+        color: var(--muted);
+        font-size: 0.9rem;
+      }
+
+      .site-footer .wrap {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0.9rem;
+        padding-top: 1.2rem;
+        border-top: 1px solid rgba(246, 235, 214, 0.08);
+      }
+
+      .fade-up {
+        opacity: 0;
+        transform: translateY(20px);
+        animation: fadeUp 700ms ease forwards;
+      }
+
+      .delay-1 {
+        animation-delay: 120ms;
+      }
+
+      .delay-2 {
+        animation-delay: 240ms;
+      }
+
+      .delay-3 {
+        animation-delay: 360ms;
+      }
+
+      @keyframes fadeUp {
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @media (max-width: 920px) {
+        .hero-grid,
+        .feature-grid,
+        .route-grid,
+        .signal-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .hero {
+          padding-top: 4rem;
+        }
+
+        h1 {
+          max-width: 11ch;
+        }
+      }
+
+      @media (max-width: 640px) {
+        .site-header .wrap,
+        .header-actions,
+        .hero-actions,
+        .site-footer .wrap {
+          flex-direction: column;
+          align-items: stretch;
+        }
+
+        .header-actions .button,
+        .hero-actions .button {
+          width: 100%;
+        }
+
+        .micro-link {
+          text-align: center;
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        html {
+          scroll-behavior: auto;
+        }
+
+        .button,
+        .fade-up {
+          transition: none;
+          animation: none;
+          opacity: 1;
+          transform: none;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="page-shell">
+      <header class="site-header">
+        <div class="wrap">
+          <a class="brand" href="#top" aria-label="TW Drive home">
+            <span class="brand-mark" aria-hidden="true">
+              <img src="https://www.techwebster.com/icon.svg" alt="" />
+            </span>
+            <span class="brand-copy">
+              <strong>TW Drive</strong>
+              <span>Secure file storage and private folder access</span>
+            </span>
+          </a>
+
+          <div class="header-actions">
+            <a class="micro-link" href="https://drive.techwebster.com" target="_blank" rel="noreferrer">
+              drive.techwebster.com
+            </a>
+            <a class="button button-primary" href="vault.html">Enter Secure Vault</a>
+          </div>
         </div>
       </header>
 
-      <nav
-        class="flex min-h-12 flex-wrap items-center gap-1 border-b border-drive-border bg-drive-surface px-4 py-3 text-[0.8125rem] sm:px-6"
-        id="breadcrumb"
-        aria-label="Current path"
-      >
-        <a
-          href="#"
-          data-path="."
-          class="rounded-[6px] px-2 py-1 text-drive-accent no-underline transition-colors duration-150 hover:bg-drive-accent/15 hover:text-drive-accent-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-drive-accent"
-        >Home</a>
-      </nav>
+      <main id="top">
+        <section class="hero">
+          <div class="wrap hero-grid">
+            <div class="hero-copy">
+              <div class="eyebrow fade-up">Privacy-led workspace</div>
+              <h1 class="fade-up delay-1">Secure file storage with private folder access.</h1>
+              <p class="fade-up delay-2">
+                TW Drive by TechWebster gives teams a privacy-first place to manage documents,
+                folders, and controlled file access. Use this landing page to promote secure
+                document sharing, protected business files, and a cleaner path into the actual
+                drive experience.
+              </p>
 
-      <main
-        class="mx-auto max-w-[920px] p-4 sm:p-6"
-      >
-        <div id="content" class="min-h-[120px]">
-          <div class="p-8 text-center text-[0.9375rem] text-drive-muted">Loading…</div>
-        </div>
+              <div class="hero-actions fade-up delay-3">
+                <a class="button button-primary" href="vault.html">Open Secure Vault</a>
+                <a
+                  class="button button-secondary"
+                  href="https://drive.techwebster.com"
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  Visit Live Drive
+                </a>
+              </div>
+
+              <p class="hero-note fade-up delay-3">
+                Built for privacy, security, and direct access to the files that matter.
+              </p>
+            </div>
+
+            <aside class="hero-card fade-up delay-2" aria-label="Security overview">
+              <div class="card-topline">
+                <span class="card-label">Security posture</span>
+                <span class="status-pill">Privacy first</span>
+              </div>
+
+              <div class="stack">
+                <article class="stack-card">
+                  <strong>Secure Vault</strong>
+                  <p>
+                    A dedicated files-and-folders workspace for users who are ready to move from
+                    the landing page into secure document access.
+                  </p>
+                  <div class="stack-meta">
+                    <span>Folders</span>
+                    <span>Documents</span>
+                    <span>Private access</span>
+                  </div>
+                </article>
+
+                <article class="stack-card">
+                  <strong>Privacy-led entry</strong>
+                  <p>
+                    The landing page frames TW Drive around trust, secure file sharing, and
+                    permission-aware access before handing people into the working environment.
+                  </p>
+                  <div class="stack-meta">
+                    <span>Clear path</span>
+                    <span>Focused CTA</span>
+                    <span>SEO-ready message</span>
+                  </div>
+                </article>
+              </div>
+            </aside>
+          </div>
+
+          <div class="wrap signal-grid fade-up delay-3">
+            <div class="signal">
+              <strong>Controlled handoff</strong>
+              Visitors land on a message-first page, then step into the actual file browser only
+              when they are ready to access files and folders.
+            </div>
+            <div class="signal">
+              <strong>Security tone</strong>
+              The UI uses TechWebster's dark theme and orange brand color instead of a generic SaaS
+              landing page palette.
+            </div>
+            <div class="signal">
+              <strong>Clear promotion</strong>
+              <code>drive.techwebster.com</code> stays visible as the live destination while the
+              local vault path remains one click away.
+            </div>
+          </div>
+        </section>
+
+        <section class="section">
+          <div class="wrap">
+            <div class="section-head fade-up">
+              <span class="section-kicker">Why it works</span>
+              <h2>Simple marketing built for privacy, trust, and search visibility.</h2>
+              <p>
+                This page keeps the message direct: secure file storage, private folder access,
+                protected document sharing, and one strong next action. It is intentionally
+                lightweight so the product promise stays obvious to both users and search engines.
+              </p>
+            </div>
+
+            <div class="feature-grid">
+              <article class="feature-card fade-up delay-1">
+                <span>01</span>
+                <h3>Privacy-first file access</h3>
+                <p>
+                  The hero leads with secure file storage and privacy-first messaging so the value
+                  is clear before anyone interacts with folders or documents.
+                </p>
+              </article>
+
+              <article class="feature-card fade-up delay-2">
+                <span>02</span>
+                <h3>Direct path to private folders</h3>
+                <p>
+                  A named destination, <strong>Secure Vault</strong>, gives users a cleaner mental
+                  model than dropping them straight into the browser or file list.
+                </p>
+              </article>
+
+              <article class="feature-card fade-up delay-3">
+                <span>03</span>
+                <h3>Search-friendly brand promotion</h3>
+                <p>
+                  The page continuously points to <code>drive.techwebster.com</code> so the brand,
+                  destination, and product keywords stay reinforced while the internal route
+                  remains available.
+                </p>
+              </article>
+            </div>
+          </div>
+        </section>
+
+        <section class="section">
+          <div class="wrap">
+            <div class="section-head fade-up">
+              <span class="section-kicker">Choose a route</span>
+              <h2>Two clear doors for secure files and folders.</h2>
+              <p>
+                Use the internal vault page for the current files-and-folders interface, or send
+                people to the live product domain from the same privacy-first landing experience.
+              </p>
+            </div>
+
+            <div class="route-grid">
+              <article class="route-card fade-up delay-1">
+                <span class="route-badge">Internal destination</span>
+                <h3>Secure Vault</h3>
+                <p>
+                  This is the renamed files and folders page. It keeps your existing TW Drive file
+                  browser intact and turns it into the secure destination behind the marketing
+                  layer.
+                </p>
+                <a class="button button-primary" href="vault.html">Go to Secure Vault</a>
+              </article>
+
+              <article class="route-card fade-up delay-2">
+                <span class="route-badge">Public destination</span>
+                <h3>drive.techwebster.com</h3>
+                <p>
+                  Send users to the live domain when you want the public-facing address for secure
+                  file storage and private business access to stay front and center during
+                  promotion.
+                </p>
+                <a
+                  class="button button-secondary"
+                  href="https://drive.techwebster.com"
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  Open Live Domain
+                </a>
+              </article>
+            </div>
+          </div>
+        </section>
       </main>
+
+      <footer class="site-footer">
+        <div class="wrap">
+          <span>TW Drive is TechWebster's privacy-first front door for secure files and folders.</span>
+          <span>© <span id="year"></span> TechWebster</span>
+        </div>
+      </footer>
     </div>
 
-    <dialog
-      id="app-dialog"
-      class="m-auto max-h-[85vh] max-w-[90vw] overflow-hidden rounded-[18px] border border-drive-border bg-drive-surface p-0 text-inherit text-drive-text shadow-[0_24px_48px_rgba(0,0,0,0.4),0_0_0_1px_#252830] backdrop:bg-black/70 backdrop:backdrop-blur-[8px] open:flex open:flex-col"
-      aria-labelledby="modal-title"
-    >
-      <div class="flex shrink-0 items-center justify-between border-b border-drive-border px-6 py-4">
-        <h2
-          id="modal-title"
-          class="m-0 min-w-0 overflow-hidden text-ellipsis whitespace-nowrap text-lg font-semibold tracking-[-0.01em]"
-        >
-          Preview
-        </h2>
-        <span class="group relative inline-flex">
-          <button
-            type="button"
-            class="inline-flex shrink-0 items-center justify-center rounded-[6px] border-0 bg-transparent p-2 leading-none text-drive-muted transition-colors duration-150 hover:bg-drive-surface-hover hover:text-drive-text focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-drive-accent motion-reduce:transition-none"
-            id="modal-close"
-            aria-label="Close"
-          >
-            <i class="fa-solid fa-xmark" aria-hidden="true"></i>
-          </button>
-          <span
-            role="tooltip"
-            class="pointer-events-none absolute right-0 top-full z-10 mt-2 hidden whitespace-nowrap rounded-[6px] border border-drive-border bg-drive-panel px-2 py-1 text-xs font-medium text-drive-text shadow-[0_8px_24px_rgba(0,0,0,0.35)] group-hover:block group-focus-within:block"
-          >Close</span>
-        </span>
-      </div>
-      <div class="min-h-0 flex-1 overflow-auto p-6" id="modal-body"></div>
-      <div
-        class="flex shrink-0 items-center justify-end gap-2 border-t border-drive-border px-6 py-4"
-        id="modal-footer"
-      ></div>
-    </dialog>
-
-    <script src="https://js.puter.com/v2/"></script>
-    <script src="script.js"></script>
+    <script>
+      document.getElementById("year").textContent = new Date().getFullYear();
+    </script>
   </body>
 </html>
