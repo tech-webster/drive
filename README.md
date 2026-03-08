@@ -221,4 +221,4 @@ sequenceDiagram
 
 ## License
 
-Add a license file before publishing this repository as open source.
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
