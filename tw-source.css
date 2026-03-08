@@ -17,5 +17,5 @@
   --color-drive-danger-hover: #ec7272;
 }
 
-@source "./index.html";
-@source "./script.js";
+@source "./vault.html";
+@source "./js/drive.js";
