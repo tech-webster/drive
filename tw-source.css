@@ -2,6 +2,7 @@
 
 @theme {
   --font-sans: "Space Grotesk", system-ui, sans-serif;
+  --font-display: "Newsreader", Georgia, serif;
   --color-drive-bg: #0a0b0f;
   --color-drive-panel: #14161f;
   --color-drive-surface: #1a1d28;
@@ -17,5 +18,6 @@
   --color-drive-danger-hover: #ec7272;
 }
 
-@source "./vault.html";
-@source "./js/drive.js";
+@source "./index.html";
+@source "./app/vault.html";
+@source "./app/drive.js";

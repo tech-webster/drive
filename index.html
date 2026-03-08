@@ -59,7 +59,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=Newsreader:opsz,wght@6..72,500;6..72,700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,500;6..72,700&family=Space+Grotesk:wght@400;500;600;700&display=swap"
       rel="stylesheet"
     />
     <script type="application/ld+json">
@@ -78,213 +78,337 @@
         "description": "TW Drive is a privacy-first file storage and private folder access experience for secure document sharing and protected team files."
       }
     </script>
-    <link rel="stylesheet" href="css/landing.css" />
+    <link rel="stylesheet" href="app/global.css" />
   </head>
-  <body>
-    <div class="page-shell">
-      <header class="site-header">
-        <div class="wrap">
-          <a class="brand" href="#top" aria-label="TW Drive home">
-            <span class="brand-mark" aria-hidden="true">
-              <img src="https://www.techwebster.com/icon.svg" alt="" />
-            </span>
-            <span class="brand-copy">
-              <strong>TW Drive</strong>
-              <span>Secure file storage and private folder access</span>
-            </span>
-          </a>
+  <body class="min-h-screen bg-drive-bg font-sans text-drive-text antialiased">
+    <div class="relative min-h-screen overflow-hidden">
+      <!-- Subtle grid + gradient atmosphere -->
+      <div
+        class="pointer-events-none fixed inset-0 z-0 opacity-[0.06]"
+        style="background-image: linear-gradient(rgba(255,255,255,0.06) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.06) 1px, transparent 1px); background-size: 64px 64px; mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, black 40%, transparent 70%);"
+      ></div>
+      <div
+        class="pointer-events-none fixed inset-0 z-0 bg-gradient-to-b from-drive-bg via-drive-bg to-black"
+        aria-hidden="true"
+      ></div>
+      <div
+        class="pointer-events-none fixed top-0 left-0 right-0 h-[60vh] z-0 opacity-30"
+        style="background: radial-gradient(ellipse 100% 80% at 50% -20%, rgba(255,127,2,0.15), transparent 50%);"
+        aria-hidden="true"
+      ></div>
 
-          <div class="header-actions">
-            <a class="micro-link" href="https://drive.techwebster.com" target="_blank" rel="noreferrer">
-              drive.techwebster.com
+      <div class="relative z-10">
+        <header
+          class="sticky top-0 z-20 border-b border-drive-border bg-drive-bg/90 backdrop-blur-md"
+        >
+          <div
+            class="mx-auto flex w-full max-w-[1180px] flex-col gap-4 px-4 py-4 sm:flex-row sm:items-center sm:justify-between sm:px-6"
+          >
+            <a
+              href="#top"
+              class="inline-flex items-center gap-3 no-underline"
+              aria-label="TW Drive home"
+            >
+              <span
+                class="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-drive-accent/40 bg-drive-accent/10"
+              >
+                <img
+                  src="https://www.techwebster.com/icon.svg"
+                  alt=""
+                  class="h-6 w-6"
+                />
+              </span>
+              <span class="block">
+                <span class="block text-base font-semibold tracking-tight text-drive-text"
+                  >TW Drive</span
+                >
+                <span class="block text-xs text-drive-muted"
+                  >Secure file storage and private folder access</span
+                >
+              </span>
             </a>
-            <a class="button button-primary" href="vault.html">Enter Secure Vault</a>
+            <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-4">
+              <a
+                href="https://drive.techwebster.com"
+                target="_blank"
+                rel="noreferrer"
+                class="text-sm text-drive-muted no-underline hover:text-drive-text focus-visible:outline focus-visible:ring-2 focus-visible:ring-drive-accent"
+              >
+                drive.techwebster.com
+              </a>
+              <a
+                href="app/vault.html"
+                class="inline-flex items-center justify-center rounded-full bg-drive-accent px-6 py-3.5 text-sm font-semibold text-drive-bg no-underline shadow-lg shadow-drive-accent/20 transition-colors hover:bg-drive-accent-hover focus-visible:outline focus-visible:ring-2 focus-visible:ring-drive-accent focus-visible:ring-offset-2 focus-visible:ring-offset-drive-bg"
+              >
+                Enter Secure Vault
+              </a>
+            </div>
           </div>
-        </div>
-      </header>
+        </header>
 
-      <main id="top">
-        <section class="hero">
-          <div class="wrap hero-grid">
-            <div class="hero-copy">
-              <div class="eyebrow fade-up">Privacy-led workspace</div>
-              <h1 class="fade-up delay-1">Secure file storage with private folder access.</h1>
-              <p class="fade-up delay-2">
-                TW Drive by TechWebster gives teams a privacy-first place to manage documents,
-                folders, and controlled file access. Use this landing page to promote secure
-                document sharing, protected business files, and a cleaner path into the actual
-                drive experience.
+        <main id="top" class="mx-auto w-full max-w-[1180px] px-4 pb-16 sm:px-6">
+          <!-- Hero: mobile stack, lg two-column -->
+          <section class="pt-10 pb-12 sm:pt-16 sm:pb-16 lg:grid lg:grid-cols-[1.1fr_0.9fr] lg:gap-12 lg:pt-24 lg:pb-20 lg:items-center">
+            <div class="space-y-6">
+              <p
+                class="inline-flex items-center gap-2 rounded-full border border-drive-border bg-white/5 px-4 py-2 text-xs font-medium uppercase tracking-wider text-drive-muted"
+              >
+                <span class="h-2 w-2 rounded-full bg-drive-accent"></span>
+                Privacy-led workspace
               </p>
-
-              <div class="hero-actions fade-up delay-3">
-                <a class="button button-primary" href="vault.html">Open Secure Vault</a>
+              <h1
+                class="font-display text-4xl font-medium leading-[1.05] tracking-tight text-drive-text sm:text-5xl lg:max-w-[12ch] lg:text-6xl"
+              >
+                Secure file storage with private folder access.
+              </h1>
+              <p class="max-w-[44rem] text-base leading-relaxed text-drive-muted sm:text-lg">
+                TW Drive by TechWebster gives teams a privacy-first place to manage documents,
+                folders, and controlled file access. Secure document sharing, protected business
+                files, and a cleaner path into the drive experience.
+              </p>
+              <div class="flex flex-col gap-3 pt-2 sm:flex-row sm:gap-4">
                 <a
-                  class="button button-secondary"
+                  href="app/vault.html"
+                  class="inline-flex items-center justify-center rounded-full bg-drive-accent px-6 py-3.5 text-sm font-semibold text-drive-bg no-underline transition-colors hover:bg-drive-accent-hover focus-visible:outline focus-visible:ring-2 focus-visible:ring-drive-accent focus-visible:ring-offset-2 focus-visible:ring-offset-drive-bg"
+                >
+                  Open Secure Vault
+                </a>
+                <a
                   href="https://drive.techwebster.com"
                   target="_blank"
                   rel="noreferrer"
+                  class="inline-flex items-center justify-center rounded-full border border-drive-border-strong bg-white/5 px-6 py-3.5 text-sm font-semibold text-drive-text no-underline transition-colors hover:bg-white/10 focus-visible:outline focus-visible:ring-2 focus-visible:ring-drive-accent focus-visible:ring-offset-2 focus-visible:ring-offset-drive-bg"
                 >
                   Visit Live Drive
                 </a>
               </div>
-
-              <p class="hero-note fade-up delay-3">
+              <p class="text-sm text-drive-muted">
                 Built for privacy, security, and direct access to the files that matter.
               </p>
             </div>
 
-            <aside class="hero-card fade-up delay-2" aria-label="Security overview">
-              <div class="card-topline">
-                <span class="card-label">Security posture</span>
-                <span class="status-pill">Privacy first</span>
+            <aside
+              class="mt-10 rounded-2xl border border-drive-border bg-drive-panel p-5 shadow-xl lg:mt-0 lg:p-6"
+              aria-label="Security overview"
+            >
+              <div class="mb-4 flex flex-wrap items-center justify-between gap-2">
+                <span class="text-xs font-medium uppercase tracking-wider text-drive-muted"
+                  >Security posture</span
+                >
+                <span
+                  class="rounded-full bg-drive-accent/10 px-3 py-1 text-xs font-medium text-drive-accent"
+                  >Privacy first</span
+                >
               </div>
-
-              <div class="stack">
-                <article class="stack-card">
-                  <strong>Secure Vault</strong>
-                  <p>
-                    A dedicated files-and-folders workspace for users who are ready to move from
-                    the landing page into secure document access.
+              <div class="space-y-4">
+                <article
+                  class="rounded-xl border border-drive-border bg-drive-surface/50 p-4"
+                >
+                  <strong class="block text-drive-text">Secure Vault</strong>
+                  <p class="mt-2 text-sm leading-relaxed text-drive-muted">
+                    A dedicated files-and-folders workspace for secure document access.
                   </p>
-                  <div class="stack-meta">
-                    <span>Folders</span>
-                    <span>Documents</span>
-                    <span>Private access</span>
+                  <div class="mt-3 flex flex-wrap gap-2">
+                    <span class="rounded-full bg-white/5 px-2.5 py-1 text-xs text-drive-muted"
+                      >Folders</span
+                    >
+                    <span class="rounded-full bg-white/5 px-2.5 py-1 text-xs text-drive-muted"
+                      >Documents</span
+                    >
+                    <span class="rounded-full bg-white/5 px-2.5 py-1 text-xs text-drive-muted"
+                      >Private access</span
+                    >
                   </div>
                 </article>
-
-                <article class="stack-card">
-                  <strong>Privacy-led entry</strong>
-                  <p>
-                    The landing page frames TW Drive around trust, secure file sharing, and
-                    permission-aware access before handing people into the working environment.
+                <article
+                  class="rounded-xl border border-drive-border bg-drive-surface/50 p-4"
+                >
+                  <strong class="block text-drive-text">Privacy-led entry</strong>
+                  <p class="mt-2 text-sm leading-relaxed text-drive-muted">
+                    Trust, secure file sharing, and permission-aware access before the working
+                    environment.
                   </p>
-                  <div class="stack-meta">
-                    <span>Clear path</span>
-                    <span>Focused CTA</span>
-                    <span>SEO-ready message</span>
+                  <div class="mt-3 flex flex-wrap gap-2">
+                    <span class="rounded-full bg-white/5 px-2.5 py-1 text-xs text-drive-muted"
+                      >Clear path</span
+                    >
+                    <span class="rounded-full bg-white/5 px-2.5 py-1 text-xs text-drive-muted"
+                      >Focused CTA</span
+                    >
                   </div>
                 </article>
               </div>
             </aside>
-          </div>
+          </section>
 
-          <div class="wrap signal-grid fade-up delay-3">
-            <div class="signal">
-              <strong>Controlled handoff</strong>
-              Visitors land on a message-first page, then step into the actual file browser only
-              when they are ready to access files and folders.
-            </div>
-            <div class="signal">
-              <strong>Security tone</strong>
-              The UI uses TechWebster's dark theme and orange brand color instead of a generic SaaS
-              landing page palette.
-            </div>
-            <div class="signal">
-              <strong>Clear promotion</strong>
-              <code>drive.techwebster.com</code> stays visible as the live destination while the
-              local vault path remains one click away.
-            </div>
-          </div>
-        </section>
-
-        <section class="section">
-          <div class="wrap">
-            <div class="section-head fade-up">
-              <span class="section-kicker">Why it works</span>
-              <h2>Simple marketing built for privacy, trust, and search visibility.</h2>
-              <p>
-                This page keeps the message direct: secure file storage, private folder access,
-                protected document sharing, and one strong next action. It is intentionally
-                lightweight so the product promise stays obvious to both users and search engines.
+          <!-- Three signals: 1 col mobile, 3 col lg -->
+          <div class="grid gap-4 border-t border-drive-border pt-8 sm:pt-10 lg:grid-cols-3 lg:gap-6">
+            <div class="border-t border-drive-border pt-4 lg:pt-0 lg:border-t-0">
+              <strong class="block text-drive-text">Controlled handoff</strong>
+              <p class="mt-1 text-sm text-drive-muted">
+                Visitors land on a message-first page, then step into the file browser when
+                they’re ready.
               </p>
             </div>
-
-            <div class="feature-grid">
-              <article class="feature-card fade-up delay-1">
-                <span>01</span>
-                <h3>Privacy-first file access</h3>
-                <p>
-                  The hero leads with secure file storage and privacy-first messaging so the value
-                  is clear before anyone interacts with folders or documents.
-                </p>
-              </article>
-
-              <article class="feature-card fade-up delay-2">
-                <span>02</span>
-                <h3>Direct path to private folders</h3>
-                <p>
-                  A named destination, <strong>Secure Vault</strong>, gives users a cleaner mental
-                  model than dropping them straight into the browser or file list.
-                </p>
-              </article>
-
-              <article class="feature-card fade-up delay-3">
-                <span>03</span>
-                <h3>Search-friendly brand promotion</h3>
-                <p>
-                  The page continuously points to <code>drive.techwebster.com</code> so the brand,
-                  destination, and product keywords stay reinforced while the internal route
-                  remains available.
-                </p>
-              </article>
-            </div>
-          </div>
-        </section>
-
-        <section class="section">
-          <div class="wrap">
-            <div class="section-head fade-up">
-              <span class="section-kicker">Choose a route</span>
-              <h2>Two clear doors for secure files and folders.</h2>
-              <p>
-                Use the internal vault page for the current files-and-folders interface, or send
-                people to the live product domain from the same privacy-first landing experience.
+            <div class="border-t border-drive-border pt-4 lg:pt-0 lg:border-t-0">
+              <strong class="block text-drive-text">Security tone</strong>
+              <p class="mt-1 text-sm text-drive-muted">
+                TechWebster’s dark theme and orange accent instead of a generic SaaS palette.
               </p>
             </div>
+            <div class="border-t border-drive-border pt-4 lg:pt-0 lg:border-t-0">
+              <strong class="block text-drive-text">Clear promotion</strong>
+              <p class="mt-1 text-sm text-drive-muted">
+                <code class="rounded bg-white/10 px-1.5 py-0.5 text-xs">drive.techwebster.com</code>
+                stays visible; vault is one click away.
+              </p>
+            </div>
+          </div>
 
-            <div class="route-grid">
-              <article class="route-card fade-up delay-1">
-                <span class="route-badge">Internal destination</span>
-                <h3>Secure Vault</h3>
-                <p>
-                  This is the renamed files and folders page. It keeps your existing TW Drive file
-                  browser intact and turns it into the secure destination behind the marketing
-                  layer.
+          <!-- Why it works -->
+          <section class="mt-16 sm:mt-20">
+            <div class="mb-10">
+              <span class="text-xs font-medium uppercase tracking-wider text-drive-accent"
+                >Why it works</span
+              >
+              <h2
+                class="font-display mt-2 text-3xl font-medium leading-tight tracking-tight text-drive-text sm:text-4xl"
+              >
+                Simple marketing built for privacy, trust, and search visibility.
+              </h2>
+              <p class="mt-3 max-w-[44rem] text-drive-muted sm:text-lg">
+                Secure file storage, private folder access, protected document sharing, and one
+                strong next action. Lightweight so the product promise stays obvious to users and
+                search engines.
+              </p>
+            </div>
+            <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+              <article
+                class="rounded-2xl border border-drive-border bg-drive-panel p-5 sm:p-6"
+              >
+                <span
+                  class="flex h-10 w-10 items-center justify-center rounded-xl bg-drive-accent/15 text-sm font-bold text-drive-accent"
+                  >01</span
+                >
+                <h3 class="mt-4 text-lg font-semibold text-drive-text">
+                  Privacy-first file access
+                </h3>
+                <p class="mt-2 text-sm leading-relaxed text-drive-muted">
+                  The hero leads with secure file storage and privacy-first messaging so the
+                  value is clear before anyone interacts with folders or documents.
                 </p>
-                <a class="button button-primary" href="vault.html">Go to Secure Vault</a>
               </article>
+              <article
+                class="rounded-2xl border border-drive-border bg-drive-panel p-5 sm:p-6"
+              >
+                <span
+                  class="flex h-10 w-10 items-center justify-center rounded-xl bg-drive-accent/15 text-sm font-bold text-drive-accent"
+                  >02</span
+                >
+                <h3 class="mt-4 text-lg font-semibold text-drive-text">
+                  Direct path to private folders
+                </h3>
+                <p class="mt-2 text-sm leading-relaxed text-drive-muted">
+                  A named destination, <strong>Secure Vault</strong>, gives users a cleaner
+                  mental model than dropping them straight into the file list.
+                </p>
+              </article>
+              <article
+                class="rounded-2xl border border-drive-border bg-drive-panel p-5 sm:p-6"
+              >
+                <span
+                  class="flex h-10 w-10 items-center justify-center rounded-xl bg-drive-accent/15 text-sm font-bold text-drive-accent"
+                  >03</span
+                >
+                <h3 class="mt-4 text-lg font-semibold text-drive-text">
+                  Search-friendly brand promotion
+                </h3>
+                <p class="mt-2 text-sm leading-relaxed text-drive-muted">
+                  The page points to <code class="rounded bg-white/10 px-1 py-0.5 text-xs">drive.techwebster.com</code>
+                  so brand and keywords stay reinforced.
+                </p>
+              </article>
+            </div>
+          </section>
 
-              <article class="route-card fade-up delay-2">
-                <span class="route-badge">Public destination</span>
-                <h3>drive.techwebster.com</h3>
-                <p>
-                  Send users to the live domain when you want the public-facing address for secure
-                  file storage and private business access to stay front and center during
-                  promotion.
+          <!-- Choose a route -->
+          <section class="mt-16 sm:mt-20">
+            <div class="mb-10">
+              <span class="text-xs font-medium uppercase tracking-wider text-drive-accent"
+                >Choose a route</span
+              >
+              <h2
+                class="font-display mt-2 text-3xl font-medium leading-tight tracking-tight text-drive-text sm:text-4xl"
+              >
+                Two clear doors for secure files and folders.
+              </h2>
+              <p class="mt-3 max-w-[44rem] text-drive-muted sm:text-lg">
+                Use the internal vault or send people to the live product domain from the same
+                privacy-first landing.
+              </p>
+            </div>
+            <div class="grid gap-6 sm:grid-cols-2">
+              <article
+                class="relative overflow-hidden rounded-2xl border border-drive-border bg-drive-panel p-5 sm:p-6"
+              >
+                <span
+                  class="inline-flex rounded-full border border-drive-border px-3 py-1 text-xs text-drive-muted"
+                  >Internal destination</span
+                >
+                <h3 class="mt-4 text-lg font-semibold text-drive-text">Secure Vault</h3>
+                <p class="mt-2 text-sm leading-relaxed text-drive-muted">
+                  The files and folders page. Keeps your TW Drive file browser intact as the
+                  secure destination behind the marketing layer.
                 </p>
                 <a
-                  class="button button-secondary"
+                  href="app/vault.html"
+                  class="mt-4 inline-flex items-center justify-center rounded-full bg-drive-accent px-5 py-2.5 text-sm font-semibold text-drive-bg no-underline transition-colors hover:bg-drive-accent-hover focus-visible:outline focus-visible:ring-2 focus-visible:ring-drive-accent focus-visible:ring-offset-2 focus-visible:ring-offset-drive-bg"
+                >
+                  Go to Secure Vault
+                </a>
+              </article>
+              <article
+                class="relative overflow-hidden rounded-2xl border border-drive-border bg-drive-panel p-5 sm:p-6"
+              >
+                <span
+                  class="inline-flex rounded-full border border-drive-border px-3 py-1 text-xs text-drive-muted"
+                  >Public destination</span
+                >
+                <h3 class="mt-4 text-lg font-semibold text-drive-text">
+                  drive.techwebster.com
+                </h3>
+                <p class="mt-2 text-sm leading-relaxed text-drive-muted">
+                  Send users to the live domain when you want the public-facing address for
+                  secure file storage front and center.
+                </p>
+                <a
                   href="https://drive.techwebster.com"
                   target="_blank"
                   rel="noreferrer"
+                  class="mt-4 inline-flex items-center justify-center rounded-full border border-drive-border-strong bg-white/5 px-5 py-2.5 text-sm font-semibold text-drive-text no-underline transition-colors hover:bg-white/10 focus-visible:outline focus-visible:ring-2 focus-visible:ring-drive-accent focus-visible:ring-offset-2 focus-visible:ring-offset-drive-bg"
                 >
                   Open Live Domain
                 </a>
               </article>
             </div>
-          </div>
-        </section>
-      </main>
+          </section>
+        </main>
 
-      <footer class="site-footer">
-        <div class="wrap">
-          <span>TW Drive is TechWebster's privacy-first front door for secure files and folders.</span>
-          <span>© <span id="year"></span> TechWebster</span>
-        </div>
-      </footer>
+        <footer
+          class="relative z-10 border-t border-drive-border bg-drive-bg px-4 py-6 sm:px-6"
+        >
+          <div
+            class="mx-auto flex max-w-[1180px] flex-col gap-4 text-sm text-drive-muted sm:flex-row sm:flex-wrap sm:items-center sm:justify-between"
+          >
+            <span>
+              TW Drive is TechWebster's privacy-first front door for secure files and folders.
+            </span>
+            <span>© <span id="year"></span> TechWebster</span>
+          </div>
+        </footer>
+      </div>
     </div>
 
-    <script src="js/landing.js"></script>
+    <script>document.getElementById("year").textContent = new Date().getFullYear();</script>
   </body>
 </html>

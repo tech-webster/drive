@@ -2,10 +2,10 @@
   "name": "tw-drive",
   "version": "1.0.0",
   "description": "TW Drive static app with Tailwind CLI build pipeline",
-  "main": "js/drive.js",
+  "main": "app/drive.js",
   "scripts": {
-    "build:css": "tailwindcss -i ./tw-source.css -o ./css/drive.css",
-    "watch:css": "tailwindcss -i ./tw-source.css -o ./css/drive.css --watch",
+    "build:css": "tailwindcss -i ./tw-source.css -o ./app/global.css",
+    "watch:css": "tailwindcss -i ./tw-source.css -o ./app/global.css --watch",
     "build": "npm run build:css"
   },
   "keywords": [
