@@ -1,1 +1,34 @@
+# Dependencies
 node_modules
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Env / secrets (never commit)
+.env
+.env.local
+.env.*.local
+*.pem
+
+# Logs & debug
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Build / output
+dist/
+build/
+.cache/
+
+# Editor / IDE (optional: remove .vscode if you want to share workspace settings)
+.idea/
+*.swp
+*.swo
+*~
+
+# Cursor / agent tooling (project-local, not part of open-source app)
+.agents/
+skills/
+skills-lock.json
