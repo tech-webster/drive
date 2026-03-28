@@ -3,6 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TW Drive | Secure Cloud Storage, Private Folder Access & Encrypted Sharing</title>
     <meta
       name="description"
       content="TW Drive — secure cloud storage and private folder access. Privacy-first file storage, encrypted document sharing, and protected team drives for business. Access your secure vault at drive.techwebster.com."
@@ -12,6 +13,8 @@
       content="TW Drive, TechWebster Drive, secure file storage, secure cloud storage, private folder access, encrypted file storage, secure document sharing, privacy-first cloud drive, protected team files, business file storage, private cloud storage, secure file sharing, document security, team drive, file vault"
     />
     <meta name="author" content="TechWebster" />
+    <meta name="publisher" content="TechWebster" />
+    <meta name="application-name" content="TW Drive" />
     <meta name="robots" content="index, follow" />
     <meta
       name="googlebot"
@@ -19,43 +22,53 @@
     />
     <meta name="theme-color" content="#FF7F00" />
     <meta name="color-scheme" content="dark" />
+    <meta name="referrer" content="strict-origin-when-cross-origin" />
     <link rel="canonical" href="https://drive.techwebster.com/" />
-    <link rel="icon" href="https://www.techwebster.com/favicon.ico" sizes="any" />
-    <link rel="apple-touch-icon" href="https://www.techwebster.com/favicon.ico" />
+    <link rel="alternate" hreflang="en" href="https://drive.techwebster.com/" />
+    <link rel="alternate" hreflang="x-default" href="https://drive.techwebster.com/" />
+    <link rel="icon" href="/favicon.ico" sizes="any" />
+    <link rel="icon" href="/icon.svg" type="image/svg+xml" />
+    <link rel="icon" href="/icon-192.png" type="image/png" sizes="192x192" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" sizes="180x180" />
+    <link rel="manifest" href="/site.webmanifest" />
     <meta property="og:type" content="website" />
-    <meta property="og:site_name" content="TechWebster" />
+    <meta property="og:site_name" content="TW Drive" />
     <meta property="og:locale" content="en_US" />
     <meta
       property="og:title"
-      content="TW Drive | Secure File Storage & Private Folder Access"
+      content="TW Drive | Secure Cloud Storage, Private Folder Access & Encrypted Sharing"
     />
     <meta
       property="og:description"
       content="Secure cloud storage and private folder access. Privacy-first file storage, encrypted document sharing, and protected team drives for business."
     />
     <meta property="og:url" content="https://drive.techwebster.com/" />
+    <meta property="og:image" content="https://drive.techwebster.com/og-img.png" />
     <meta
-      property="og:image"
-      content="https://www.techwebster.com/opengraph-image"
+      property="og:image:secure_url"
+      content="https://drive.techwebster.com/og-img.png"
     />
+    <meta property="og:image:type" content="image/png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
     <meta
       property="og:image:alt"
-      content="TW Drive by TechWebster secure file storage landing page"
+      content="TW Drive social preview featuring secure cloud storage, encrypted sharing, and private folder access."
     />
     <meta name="twitter:card" content="summary_large_image" />
     <meta
       name="twitter:title"
-      content="TW Drive | Secure File Storage & Private Folder Access"
+      content="TW Drive | Secure Cloud Storage, Private Folder Access & Encrypted Sharing"
     />
     <meta
       name="twitter:description"
       content="Secure cloud storage and private folder access. Privacy-first file storage, encrypted document sharing, and protected team drives."
     />
+    <meta name="twitter:image" content="https://drive.techwebster.com/og-img.png" />
     <meta
-      name="twitter:image"
-      content="https://www.techwebster.com/opengraph-image"
+      name="twitter:image:alt"
+      content="TW Drive social preview featuring secure cloud storage, encrypted sharing, and private folder access."
     />
-    <title>TW Drive | Secure Cloud Storage & Private Folder Access — Privacy-First File Vault</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -65,18 +78,50 @@
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
-        "@type": "SoftwareApplication",
-        "name": "TW Drive",
-        "applicationCategory": "BusinessApplication",
-        "operatingSystem": "Web",
-        "url": "https://drive.techwebster.com/",
-        "creator": {
-          "@type": "Organization",
-          "name": "TechWebster",
-          "url": "https://www.techwebster.com/"
-        },
-        "description": "TW Drive provides secure cloud storage, private folder access, and encrypted document sharing. Privacy-first file storage and protected team drives for business.",
-        "featureList": ["Secure file storage", "Private folder access", "Encrypted document sharing", "Team drive", "Privacy-first cloud storage", "Secure file vault"]
+        "@graph": [
+          {
+            "@type": "Organization",
+            "@id": "https://drive.techwebster.com/#organization",
+            "name": "TechWebster",
+            "url": "https://www.techwebster.com/",
+            "logo": {
+              "@type": "ImageObject",
+              "url": "https://drive.techwebster.com/logo.svg"
+            }
+          },
+          {
+            "@type": "WebSite",
+            "@id": "https://drive.techwebster.com/#website",
+            "url": "https://drive.techwebster.com/",
+            "name": "TW Drive",
+            "description": "TW Drive provides secure cloud storage, private folder access, and encrypted document sharing for business teams.",
+            "publisher": {
+              "@id": "https://drive.techwebster.com/#organization"
+            },
+            "inLanguage": "en"
+          },
+          {
+            "@type": "SoftwareApplication",
+            "@id": "https://drive.techwebster.com/#software",
+            "name": "TW Drive",
+            "applicationCategory": "BusinessApplication",
+            "operatingSystem": "Web",
+            "url": "https://drive.techwebster.com/",
+            "image": "https://drive.techwebster.com/og-img.png",
+            "description": "TW Drive provides secure cloud storage, private folder access, encrypted document sharing, and protected team drives for business.",
+            "publisher": {
+              "@id": "https://drive.techwebster.com/#organization"
+            },
+            "featureList": [
+              "Secure file storage",
+              "Private folder access",
+              "Encrypted document sharing",
+              "Protected team drives",
+              "Privacy-first cloud storage",
+              "Secure file vault"
+            ]
+          }
+        ]
       }
     </script>
     <link rel="stylesheet" href="app/global.css" />
@@ -114,7 +159,7 @@
                 class="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-drive-accent/40 bg-drive-accent/10"
               >
                 <img
-                  src="https://www.techwebster.com/icon.svg"
+                  src="/icon.svg"
                   alt=""
                   class="h-6 w-6"
                 />

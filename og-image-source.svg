@@ -1,0 +1,76 @@
+<svg width="1200" height="630" viewBox="0 0 1200 630" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="120" y1="48" x2="1052" y2="630" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#13161F"/>
+      <stop offset="0.6" stop-color="#0B0E14"/>
+      <stop offset="1" stop-color="#05070B"/>
+    </linearGradient>
+    <radialGradient id="glowA" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(888 146) rotate(151.195) scale(543.257 334.225)">
+      <stop stop-color="#FF7F00" stop-opacity="0.35"/>
+      <stop offset="1" stop-color="#FF7F00" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="glowB" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(230 542) rotate(-20.412) scale(458.561 278.733)">
+      <stop stop-color="#334155" stop-opacity="0.48"/>
+      <stop offset="1" stop-color="#334155" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="cardStroke" x1="288" y1="140" x2="1040" y2="536" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FFFFFF" stop-opacity="0.12"/>
+      <stop offset="1" stop-color="#FFFFFF" stop-opacity="0.03"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="#FF7F00"/>
+      <stop offset="1" stop-color="#FFB35B"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="1200" height="630" rx="36" fill="url(#bg)"/>
+  <rect width="1200" height="630" rx="36" fill="url(#glowA)"/>
+  <rect width="1200" height="630" rx="36" fill="url(#glowB)"/>
+
+  <g opacity="0.2">
+    <path d="M0 91H1200" stroke="#FFFFFF" stroke-opacity="0.08"/>
+    <path d="M0 183H1200" stroke="#FFFFFF" stroke-opacity="0.05"/>
+    <path d="M0 275H1200" stroke="#FFFFFF" stroke-opacity="0.05"/>
+    <path d="M0 367H1200" stroke="#FFFFFF" stroke-opacity="0.05"/>
+    <path d="M0 459H1200" stroke="#FFFFFF" stroke-opacity="0.05"/>
+    <path d="M0 551H1200" stroke="#FFFFFF" stroke-opacity="0.08"/>
+    <path d="M133 0V630" stroke="#FFFFFF" stroke-opacity="0.05"/>
+    <path d="M320 0V630" stroke="#FFFFFF" stroke-opacity="0.04"/>
+    <path d="M507 0V630" stroke="#FFFFFF" stroke-opacity="0.04"/>
+    <path d="M694 0V630" stroke="#FFFFFF" stroke-opacity="0.04"/>
+    <path d="M881 0V630" stroke="#FFFFFF" stroke-opacity="0.04"/>
+    <path d="M1068 0V630" stroke="#FFFFFF" stroke-opacity="0.05"/>
+  </g>
+
+  <rect x="58" y="58" width="1084" height="514" rx="32" fill="#0D1017" fill-opacity="0.8" stroke="url(#cardStroke)"/>
+
+  <g>
+    <rect x="102" y="106" width="102" height="102" rx="24" fill="#1E1E1E"/>
+    <path d="M107.152 124.059C107.152 113.461 115.744 104.869 126.342 104.869H169.454C180.052 104.869 188.644 113.461 188.644 124.059V163.776C188.644 176.734 178.138 187.24 165.18 187.24H126.342C115.744 187.24 107.152 178.648 107.152 168.05V124.059Z" fill="#FF7F00"/>
+    <path d="M100 116.907C100 106.309 108.592 97.7169 119.19 97.7169H162.302C172.9 97.7169 181.492 106.309 181.492 116.907V160.019C181.492 170.617 172.9 179.209 162.302 179.209H119.19C108.592 179.209 100 170.617 100 160.019V116.907Z" fill="#1E1E1E"/>
+    <path d="M119.491 132.645C119.491 130.841 120.643 129.54 122.399 129.54C124.204 129.54 125.355 130.841 125.355 132.645V137.304H129.725C131.529 137.304 132.782 138.306 132.782 140.009C132.782 141.713 131.529 142.714 129.725 142.714H125.355V152.824C125.355 155.78 126.707 156.832 128.561 156.832H129.914C131.617 156.832 132.769 157.783 132.769 159.587C132.769 161.392 131.617 162.343 129.914 162.343H128.36C123.202 162.343 119.491 159.738 119.491 152.874V142.714H117.988C116.233 142.714 114.93 141.713 114.93 140.009C114.93 138.306 116.233 137.304 117.988 137.304H119.491V132.645Z" fill="white"/>
+    <path d="M166.766 137.304C169.672 137.304 170.323 139.709 169.672 141.362L162.656 160.258C162.105 161.761 161.003 162.362 159.801 162.362C158.148 162.362 157.347 161.361 156.896 160.058L152.738 147.835L148.58 160.108C148.179 161.31 147.328 162.362 145.725 162.362C144.472 162.362 143.37 161.761 142.818 160.258L135.802 141.362C135.201 139.709 135.852 137.304 138.758 137.304C139.509 137.304 140.862 137.504 141.363 139.308L145.822 153.885L150.03 140.009C150.481 138.656 151.333 137.805 152.785 137.805C154.188 137.805 155.039 138.656 155.44 140.009L159.648 153.835L164.107 139.308C164.658 137.504 165.96 137.304 166.766 137.304Z" fill="white"/>
+    <path d="M172.305 160.621H188.368" stroke="#FF7F00" stroke-width="4.6972" stroke-linecap="round"/>
+  </g>
+
+  <text x="234" y="144" fill="#FFB35B" font-size="23" font-family="Arial, Helvetica, sans-serif" font-weight="700" letter-spacing="5.2">TECHWEBSTER</text>
+  <text x="234" y="222" fill="#F8FAFC" font-size="76" font-family="Arial, Helvetica, sans-serif" font-weight="800">TW Drive</text>
+  <text x="234" y="294" fill="#D5DBE5" font-size="34" font-family="Arial, Helvetica, sans-serif" font-weight="600">Secure cloud storage built for private teams.</text>
+
+  <text x="102" y="382" fill="#F8FAFC" font-size="54" font-family="Arial, Helvetica, sans-serif" font-weight="700">Private folder access</text>
+  <text x="102" y="442" fill="#F8FAFC" font-size="54" font-family="Arial, Helvetica, sans-serif" font-weight="700">Encrypted sharing</text>
+  <text x="102" y="502" fill="#F8FAFC" font-size="54" font-family="Arial, Helvetica, sans-serif" font-weight="700">Protected business files</text>
+
+  <g>
+    <rect x="838" y="330" width="236" height="54" rx="27" fill="#FF7F00" fill-opacity="0.12" stroke="#FF7F00" stroke-opacity="0.26"/>
+    <text x="871" y="365" fill="#FFB35B" font-size="24" font-family="Arial, Helvetica, sans-serif" font-weight="700">Privacy-first vault</text>
+    <rect x="838" y="404" width="236" height="54" rx="27" fill="#FFFFFF" fill-opacity="0.04" stroke="#FFFFFF" stroke-opacity="0.08"/>
+    <text x="872" y="439" fill="#E2E8F0" font-size="24" font-family="Arial, Helvetica, sans-serif" font-weight="700">Secure team drive</text>
+    <rect x="838" y="478" width="236" height="54" rx="27" fill="#FFFFFF" fill-opacity="0.04" stroke="#FFFFFF" stroke-opacity="0.08"/>
+    <text x="877" y="513" fill="#E2E8F0" font-size="24" font-family="Arial, Helvetica, sans-serif" font-weight="700">drive.techwebster.com</text>
+  </g>
+
+  <path d="M808 128C860 159.333 907.333 205.333 950 266C992.667 326.667 1033.33 405.667 1072 503" stroke="url(#accent)" stroke-width="3.5" stroke-linecap="round" stroke-dasharray="6 14" opacity="0.75"/>
+  <circle cx="808" cy="128" r="8" fill="#FF7F00"/>
+  <circle cx="1072" cy="503" r="8" fill="#FFB35B"/>
+</svg>
